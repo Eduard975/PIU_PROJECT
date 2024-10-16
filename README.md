@@ -1,1 +1,1 @@
-JAva game
+Java game
