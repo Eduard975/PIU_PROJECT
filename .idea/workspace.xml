@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c6c767e-5052-4529-82dc-ebcc0e9ad7f2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/main/MainPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="6c6c767e-5052-4529-82dc-ebcc0e9ad7f2" name="Changes" comment="add MainPanel class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/MainPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainPanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,11 +66,23 @@
       <updated>1729084052590</updated>
       <workItem from="1729084053626" duration="337000" />
       <workItem from="1729084968212" duration="105000" />
-      <workItem from="1730290766422" duration="1560000" />
+      <workItem from="1730290766422" duration="2089000" />
     </task>
+    <task id="LOCAL-00001" summary="add MainPanel class">
+      <created>1730292470457</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1730292470457</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add MainPanel class" />
+    <option name="LAST_COMMIT_MESSAGE" value="add MainPanel class" />
   </component>
 </project>

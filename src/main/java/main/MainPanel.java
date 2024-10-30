@@ -5,17 +5,24 @@ public class MainPanel implements Runnable {
     int FPS = 60;
     boolean running = true;
     boolean RENDER_TIME = true;
+
+    public boolean getRunning() {
+        return running;
+    }
+    public void setName(boolean newRunning) {
+        this.running = newRunning;
+    }
+
     @Override
     public void run() {
         long initialTime = System.nanoTime();
-        final double timeU = (double) 1000000000 / UPS;
-        final double timeF = (double) 1000000000 / FPS;
+        final double timeU = 1000000000.0 / (double) UPS;
+        final double timeF = 1000000000.0 / (double) FPS;
         double deltaU = 0, deltaF = 0;
         int frames = 0, ticks = 0;
         long timer = System.currentTimeMillis();
 
         while (running) {
-
             long currentTime = System.nanoTime();
             deltaU += (currentTime - initialTime) / timeU;
             deltaF += (currentTime - initialTime) / timeF;
