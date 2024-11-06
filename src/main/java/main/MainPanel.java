@@ -24,6 +24,7 @@ public class MainPanel implements Runnable {
 
         while (running) {
             long currentTime = System.nanoTime();
+            //new TestClass().run();
             deltaU += (currentTime - initialTime) / timeU;
             deltaF += (currentTime - initialTime) / timeF;
             initialTime = currentTime;
