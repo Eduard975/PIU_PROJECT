@@ -1,5 +1,6 @@
 package main;
 
+
 public class MainPanel implements Runnable {
     final int UPS = 60;
     int FPS = 60;
@@ -21,10 +22,10 @@ public class MainPanel implements Runnable {
         double deltaU = 0, deltaF = 0;
         int frames = 0, ticks = 0;
         long timer = System.currentTimeMillis();
-
-        while (running) {
+        TestClass TestWindow = new TestClass();
+        TestWindow.run();
+        while (TestWindow.isOpen) {
             long currentTime = System.nanoTime();
-            //new TestClass().run();
             deltaU += (currentTime - initialTime) / timeU;
             deltaF += (currentTime - initialTime) / timeF;
             initialTime = currentTime;

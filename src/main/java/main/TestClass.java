@@ -16,7 +16,7 @@ public class TestClass {
 
     // The window handle
     private long window;
-
+    public boolean isOpen = true;
 
     public void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -54,8 +54,10 @@ public class TestClass {
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+                isOpen = false;
+            }
         });
 
         // Get the thread stack and push a new frame
