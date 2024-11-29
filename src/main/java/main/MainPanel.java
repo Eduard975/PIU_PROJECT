@@ -1,30 +1,44 @@
 package main;
 
 
+import graphic.Window;
+
+import static org.lwjgl.glfw.GLFW.glfwInit;
+
 public class MainPanel implements Runnable {
     final int UPS = 60;
     int FPS = 60;
     boolean running = true;
     boolean RENDER_TIME = true;
 
-    public boolean getRunning() {
-        return running;
+    protected Window window;
+
+
+    public void dispose(){
+        window.destroy();
     }
-    public void setName(boolean newRunning) {
-        this.running = newRunning;
+
+    public void init(){
+        if (!glfwInit()) {
+            throw new IllegalStateException("Unable to initialize GLFW!");
+        }
+        window = new Window(640, 480, "NecroLord", true);
     }
 
     @Override
     public void run() {
+
         long initialTime = System.nanoTime();
         final double timeU = 1000000000.0 / (double) UPS;
         final double timeF = 1000000000.0 / (double) FPS;
         double deltaU = 0, deltaF = 0;
         int frames = 0, ticks = 0;
         long timer = System.currentTimeMillis();
-        TestClass TestWindow = new TestClass();
-        TestWindow.run();
-        while (TestWindow.isOpen) {
+
+        init();
+        
+        while (running) {
+            running = window.isClosing();
             long currentTime = System.nanoTime();
             deltaU += (currentTime - initialTime) / timeU;
             deltaF += (currentTime - initialTime) / timeF;
