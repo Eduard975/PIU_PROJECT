@@ -4,6 +4,6 @@ package main;
 public class Main {
     public static void main(String[] args) {
         MainPanel gameLoop = new MainPanel();
-        gameLoop.run();
+        gameLoop.start();
     }
 }

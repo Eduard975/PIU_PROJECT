@@ -12,7 +12,7 @@ public class Window {
     private final long id;
     private final GLFWKeyCallback keyCallback;
 
-    public Window(int width, int height, CharSequence title, boolean vsync){
+    public Window(int width, int height, CharSequence title){
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         long temp = glfwCreateWindow(1, 1, "", NULL, NULL);
@@ -22,6 +22,7 @@ public class Window {
         glfwDestroyWindow(temp);
 
         glfwDefaultWindowHints();
+
         if (caps.OpenGL32) {
             /* Hints for OpenGL 3.2 core profile */
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -36,6 +37,7 @@ public class Window {
             throw new RuntimeException("Neither OpenGL 3.2 nor OpenGL 2.1 is "
                     + "supported, you may want to update your graphics driver.");
         }
+
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         /* Create window with specified OpenGL context */
@@ -55,11 +57,6 @@ public class Window {
         /* Create OpenGL context */
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
-
-        /* Enable v-sync */
-        if (vsync) {
-            glfwSwapInterval(1);
-        }
 
         /* Set key callback */
         keyCallback = new GLFWKeyCallback() {

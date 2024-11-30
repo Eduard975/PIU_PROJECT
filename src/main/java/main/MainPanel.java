@@ -1,70 +1,97 @@
 package main;
 
 
+import graphic.Shader;
 import graphic.Window;
+import map.Level;
+import math.Matrix4f;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL;
 
-import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11C.GL_VERSION;
+import static org.lwjgl.opengl.GL11C.glGetString;
 
 public class MainPanel implements Runnable {
-    final int UPS = 60;
-    int FPS = 60;
-    boolean running = true;
-    boolean RENDER_TIME = true;
+    public static final int TARGET_FPS = 75;
+    public static final int TARGET_UPS = 30;
+
+    private GLFWErrorCallback errorCallback;
+
+    protected boolean running;
 
     protected Window window;
 
+    private Level level;
 
-    public void dispose(){
-        window.destroy();
+    public void start() {
+        init();
+        run();
+        dispose();
     }
 
-    public void init(){
+    public void dispose() {
+
+        /* Release window and its callbacks */
+        window.destroy();
+
+        /* Terminate GLFW and release the error callback */
+        glfwTerminate();
+        errorCallback.free();
+    }
+
+    public void init() {
+        /* Set error callback */
+        errorCallback = GLFWErrorCallback.createPrint();
+        glfwSetErrorCallback(errorCallback);
+
+        /* Initialize GLFW */
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW!");
         }
-        window = new Window(640, 480, "NecroLord", true);
+
+        window = new Window(640, 480, "NecroLord");
+        Shader.loadAll();
+
+        Matrix4f pr_matrix = Matrix4f.orthographic(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f );
+
+        Shader.BACKGROUND.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.BACKGROUND.setUniformMat4f("tile_color", Matrix4f.identity()); // Default color
+
+        running = true;
+
+        level = new Level();
     }
+
 
     @Override
     public void run() {
+        float delta;
 
-        long initialTime = System.nanoTime();
-        final double timeU = 1000000000.0 / (double) UPS;
-        final double timeF = 1000000000.0 / (double) FPS;
-        double deltaU = 0, deltaF = 0;
-        int frames = 0, ticks = 0;
-        long timer = System.currentTimeMillis();
-
-        init();
-        
         while (running) {
-            running = window.isClosing();
-            long currentTime = System.nanoTime();
-            deltaU += (currentTime - initialTime) / timeU;
-            deltaF += (currentTime - initialTime) / timeF;
-            initialTime = currentTime;
-
-            if (deltaU >= 1) {
-                //getInput();
-                //update();
-                ticks++;
-                deltaU--;
+            /* Check if game should close */
+            if (window.isClosing()) {
+                running = false;
             }
 
-            if (deltaF >= 1) {
-                //render();
-                frames++;
-                deltaF--;
-            }
+            window.update();
+            update();
+            render();
 
-            if (System.currentTimeMillis() - timer > 1000) {
-                if (RENDER_TIME) {
-                    System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
-                }
-                frames = 0;
-                ticks = 0;
-                timer += 1000;
-            }
         }
+    }
+
+    private void update() {
+        long windowId = GLFW.glfwGetCurrentContext();
+        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
+            System.out.println(glGetString(GL_VERSION));
+        }
+    }
+
+    private void render() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        level.render();
     }
 }
