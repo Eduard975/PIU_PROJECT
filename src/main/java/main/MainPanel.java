@@ -1,22 +1,24 @@
 package main;
 
 
+import entities.EnemyManager;
+import player.Player;
 import graphic.Shader;
 import graphic.Window;
 import map.Level;
 import math.Matrix4f;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11C.GL_VERSION;
-import static org.lwjgl.opengl.GL11C.glGetString;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 public class MainPanel implements Runnable {
-    public static final int TARGET_FPS = 75;
-    public static final int TARGET_UPS = 30;
+    public static final double TARGET_FPS = 60;
+    public static final double TARGET_UPS = 60;
+
+    private static final boolean RENDER_TIME = true;
 
     private GLFWErrorCallback errorCallback;
 
@@ -25,6 +27,11 @@ public class MainPanel implements Runnable {
     protected Window window;
 
     private Level level;
+
+    private Player player;
+
+    private EnemyManager enemyManager;
+
 
     public void start() {
         init();
@@ -53,45 +60,91 @@ public class MainPanel implements Runnable {
         }
 
         window = new Window(640, 480, "NecroLord");
+        running = true;
+
+        glActiveTexture(GL_TEXTURE1);
         Shader.loadAll();
 
         Matrix4f pr_matrix = Matrix4f.orthographic(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f );
 
         Shader.BACKGROUND.setUniformMat4f("pr_matrix", pr_matrix);
-        Shader.BACKGROUND.setUniformMat4f("tile_color", Matrix4f.identity()); // Default color
+        Shader.BACKGROUND.setUniform1i("tex", 1);
 
-        running = true;
+        Shader.PLAYER.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.PLAYER.setUniform1i("tex", 1);
+
+        Shader.SLIME.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.SLIME.setUniform1i("tex", 1);
+
+        Shader.PROJECTILE.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.PROJECTILE.setUniform1i("tex", 1);
 
         level = new Level();
+        player = new Player();
+        enemyManager = new EnemyManager();
+        enemyManager.addEnemy();
     }
 
 
     @Override
     public void run() {
-        float delta;
+
+        long initialTime = System.nanoTime();
+        final double timeU = 1000000000 / TARGET_UPS;
+        final double timeF = 1000000000 / TARGET_FPS;
+        double deltaU = 0, deltaF = 0;
+        int frames = 0, ticks = 0;
+        long timer = System.currentTimeMillis();
 
         while (running) {
-            /* Check if game should close */
             if (window.isClosing()) {
                 running = false;
             }
 
-            window.update();
-            update();
-            render();
+            long currentTime = System.nanoTime();
+            deltaU += (currentTime - initialTime) / timeU;
+            deltaF += (currentTime - initialTime) / timeF;
+            initialTime = currentTime;
 
+            if (deltaU >= 1) {
+                update();
+                ticks++;
+                deltaU--;
+            }
+
+            if (deltaF >= 1) {
+                render();
+                frames++;
+                deltaF--;
+            }
+
+            if (System.currentTimeMillis() - timer > 1000) {
+                if (RENDER_TIME) {
+                    System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
+                }
+                frames = 0;
+                ticks = 0;
+                timer += 1000;
+            }
         }
     }
 
+
     private void update() {
-        long windowId = GLFW.glfwGetCurrentContext();
-        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
-            System.out.println(glGetString(GL_VERSION));
-        }
+        window.update();
+        player.update();
+        level.update();
+        enemyManager.update();
+//        long windowId = GLFW.glfwGetCurrentContext();
+//        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
+//            System.out.println(glGetString(GL_VERSION));
+//        }
     }
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         level.render();
+        player.render();
+        enemyManager.render();
     }
 }

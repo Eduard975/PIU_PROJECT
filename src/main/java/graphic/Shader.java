@@ -14,7 +14,7 @@ public class Shader {
     public static final int VERTEX_ATTRIB = 0;
     public static final int TCOORD_ATTRIB = 1;
 
-    public static Shader BACKGROUND;
+    public static Shader BACKGROUND, PLAYER, SLIME, PROJECTILE;
 
     private boolean enabled = false;
 
@@ -27,6 +27,9 @@ public class Shader {
 
     public static void loadAll() {
         BACKGROUND = new Shader("src/main/shaders/bg.vert", "src/main/shaders/bg.frag");
+        PLAYER = new Shader("src/main/shaders/player.vert", "src/main/shaders/player.frag");
+        SLIME = new Shader("src/main/shaders/slime.vert", "src/main/shaders/slime.frag");
+        PROJECTILE = new Shader("src/main/shaders/projectile.vert", "src/main/shaders/projectile.frag");
     }
 
     public int getUniform(String name) {
