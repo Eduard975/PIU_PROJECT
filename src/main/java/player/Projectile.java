@@ -47,8 +47,7 @@ public class Projectile {
 
     public void render() {
         Shader.PROJECTILE.enable();
-        Shader.PROJECTILE.setUniformMat4f("ml_matrix", Matrix4f.translate(position));
-        Shader.PROJECTILE.setUniformMat4f("rot_matrix", Matrix4f.rotate(angle));
+        Shader.PROJECTILE.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(angle)));
         texture.bind();
         mesh.render();
         Shader.PROJECTILE.disable();

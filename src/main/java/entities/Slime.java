@@ -42,8 +42,7 @@ public class Slime extends EnemyBase {
     @Override
     public void render() {
         Shader.SLIME.enable();
-        Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position));
-        Shader.SLIME.setUniformMat4f("rot_matrix", Matrix4f.rotate(angle));
+        Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(angle)));
         texture.bind();
         mesh.render();
         Shader.SLIME.disable();

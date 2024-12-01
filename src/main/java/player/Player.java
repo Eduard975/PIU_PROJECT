@@ -75,8 +75,7 @@ public class Player {
 
     public void render() {
         Shader.PLAYER.enable();
-        Shader.PLAYER.setUniformMat4f("ml_matrix", Matrix4f.translate(position));
-        Shader.PLAYER.setUniformMat4f("rot_matrix", Matrix4f.rotate(angle));
+        Shader.PLAYER.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(angle)));
         texture.bind();
         mesh.render();
         for(Projectile projectile : projectiles){
