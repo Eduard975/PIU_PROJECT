@@ -65,7 +65,7 @@ public class MainPanel implements Runnable {
         }
 
 
-        window = new Window(640, 480, "NecroLord");
+        window = new Window("NecroLord");
         running = true;
 
         player = new Player();

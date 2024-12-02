@@ -3,11 +3,12 @@ package player;
 import graphic.Shader;
 import graphic.Texture;
 import graphic.VertexArray;
+import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
 
 public class Projectile {
-    private float SIZE = 4.0f;
+    private float SIZE = Level.TILE_SIZE/2.0f;
     private VertexArray mesh;
     private Texture texture;
 

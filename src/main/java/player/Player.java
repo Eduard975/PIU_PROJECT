@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Player {
-    private float SIZE = 4.0f;
+    private float SIZE = Level.TILE_SIZE/2.0f;
     private VertexArray mesh;
     private Texture texture;
+
+    private float speed = SIZE/2;
 
     public ArrayList<Projectile> projectiles = new ArrayList<>();
 
@@ -53,25 +55,25 @@ public class Player {
 
     public void update(){
         if (glfwGetKey(windowId, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            position.y--;
+            position.y -= speed;
             if(position.y < -Level.yBounds){
                 position.y = -Level.yBounds;
             }
         }
         if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
-            position.y++;
+            position.y += speed;
             if(position.y > Level.yBounds){
                 position.y = Level.yBounds;
             }
         }
         if (glfwGetKey(windowId, GLFW_KEY_LEFT) == GLFW_PRESS) {
-            position.x--;
+            position.x -= speed;
             if(position.x < -Level.xBounds){
                 position.x = -Level.xBounds;
             }
         }
         if (glfwGetKey(windowId, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-            position.x++;
+            position.x += speed;
             if(position.x > Level.xBounds){
                 position.x = Level.xBounds;
             }

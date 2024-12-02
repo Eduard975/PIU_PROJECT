@@ -12,7 +12,10 @@ public class Window {
     private final long id;
     private final GLFWKeyCallback keyCallback;
 
-    public Window(int width, int height, CharSequence title){
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT  = 720;
+
+    public Window( CharSequence title){
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         long temp = glfwCreateWindow(1, 1, "", NULL, NULL);
@@ -41,7 +44,7 @@ public class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         /* Create window with specified OpenGL context */
-        id = glfwCreateWindow(width, height, title, NULL, NULL);
+        id = glfwCreateWindow(WIDTH, HEIGHT, title, NULL, NULL);
         if (id == NULL) {
             glfwTerminate();
             throw new RuntimeException("Failed to create the GLFW window!");
@@ -50,8 +53,8 @@ public class Window {
         /* Center window on screen */
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(id,
-                (vidmode.width() - width) / 2,
-                (vidmode.height() - height) / 2
+                (vidmode.width() - WIDTH) / 2,
+                (vidmode.height() - HEIGHT) / 2
         );
 
         /* Create OpenGL context */

@@ -23,10 +23,10 @@ public class Camera {
     }
 
     public Matrix4f getProjectionMatrix() {
-        float left = position.x - 32 / 2f;
-        float right = position.x + 32 /2f;
-        float top = position.y - 32 / 2f;
-        float bottom = position.y + 32 /2f;
+        float left = position.x - Window.WIDTH / 2f;
+        float right = position.x + Window.WIDTH /2f;
+        float top = position.y - Window.HEIGHT / 2f;
+        float bottom = position.y + Window.HEIGHT /2f;
 
         return Matrix4f.orthographic(left, right, top, bottom, -1.0f, 1.0f);
     }

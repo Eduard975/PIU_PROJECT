@@ -3,11 +3,12 @@ package entities;
 import graphic.Shader;
 import graphic.Texture;
 import graphic.VertexArray;
+import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
 
 public class DeadEnemy {
-    public float SIZE = 4.0f;
+    public float SIZE = Level.TILE_SIZE/2.0f;
     public VertexArray mesh;
     public Texture texture;
     public int angle;
