@@ -65,18 +65,18 @@ public class Level {
     }
 
     public void update() {
-        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
-            yScroll++;
-        }
-        if (glfwGetKey(windowId, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            yScroll--;
-        }
-        if (glfwGetKey(windowId, GLFW_KEY_LEFT) == GLFW_PRESS) {
-            xScroll--;
-        }
-        if (glfwGetKey(windowId, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-            xScroll++;
-        }
+//        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
+//            yScroll++;
+//        }
+//        if (glfwGetKey(windowId, GLFW_KEY_DOWN) == GLFW_PRESS) {
+//            yScroll--;
+//        }
+//        if (glfwGetKey(windowId, GLFW_KEY_LEFT) == GLFW_PRESS) {
+//            xScroll--;
+//        }
+//        if (glfwGetKey(windowId, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+//            xScroll++;
+//        }
 
 
     }

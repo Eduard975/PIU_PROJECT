@@ -1,4 +1,4 @@
-package player;
+package entities;
 
 import graphic.Shader;
 import graphic.Texture;
@@ -6,25 +6,22 @@ import graphic.VertexArray;
 import math.Matrix4f;
 import math.Vector3f;
 
-public class Projectile {
-    private float SIZE = 4.0f;
-    private VertexArray mesh;
-    private Texture texture;
+public class DeadEnemy {
+    public float SIZE = 4.0f;
+    public VertexArray mesh;
+    public Texture texture;
+    public int angle;
 
-    private float angle;
-    private Vector3f position;
+    public Vector3f position;
 
-    public float damage = 10;
-
-    public Projectile(Vector3f playerPosition, float playerAngle) {
-        angle = playerAngle;
-        position = new Vector3f(playerPosition.x, playerPosition.y, playerPosition.z);
+    public DeadEnemy(Vector3f enemyPosition){
+        position = new Vector3f(enemyPosition.x, enemyPosition.y, enemyPosition.z);
 
         float[] vertices = new float[] {
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,
                 -SIZE / 2.0f,  SIZE / 2.0f, 0.2f,
-                 SIZE / 2.0f,  SIZE / 2.0f, 0.2f,
-                 SIZE / 2.0f, -SIZE / 2.0f, 0.2f
+                SIZE / 2.0f,  SIZE / 2.0f, 0.2f,
+                SIZE / 2.0f, -SIZE / 2.0f, 0.2f
         };
 
         byte[] indices = new byte[] {
@@ -43,16 +40,12 @@ public class Projectile {
         texture = new Texture("src/main/resources/player.png");
     }
 
-    public void update(){
-        position.x++;
-    }
-
     public void render() {
-        Shader.PROJECTILE.enable();
-        Shader.PROJECTILE.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(angle)));
+        Shader.SLIME.enable();
+        Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(90.0f)));
         texture.bind();
         mesh.render();
-        Shader.PROJECTILE.disable();
+        Shader.SLIME.disable();
     }
 
     public Vector3f getMinBounds() {

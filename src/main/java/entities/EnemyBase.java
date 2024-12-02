@@ -22,4 +22,12 @@ public abstract class EnemyBase {
     abstract public void update();
 
     abstract public void render();
+
+    public Vector3f getMinBounds() {
+        return new Vector3f(position.x - SIZE / 2, position.y - SIZE / 2, 0);
+    }
+
+    public Vector3f getMaxBounds() {
+        return new Vector3f(position.x + SIZE / 2, position.y + SIZE / 2, 0);
+    }
 }

@@ -2,6 +2,8 @@ package main;
 
 
 import entities.EnemyManager;
+import entities.Slime;
+import math.Vector3f;
 import player.Player;
 import graphic.Shader;
 import graphic.Window;
@@ -31,6 +33,8 @@ public class MainPanel implements Runnable {
     private Player player;
 
     private EnemyManager enemyManager;
+
+    private CollisionManager collisionManager;
 
 
     public void start() {
@@ -81,6 +85,7 @@ public class MainPanel implements Runnable {
 
         level = new Level();
         player = new Player();
+        collisionManager = new CollisionManager();
         enemyManager = new EnemyManager();
         enemyManager.addEnemy();
     }
@@ -134,7 +139,9 @@ public class MainPanel implements Runnable {
         window.update();
         player.update();
         level.update();
+        collisionManager.checkProjectilesCollision(player.projectiles,enemyManager.enemies);
         enemyManager.update();
+        enemyManager.enemies.forEach(e -> System.out.println(e.hp));
 //        long windowId = GLFW.glfwGetCurrentContext();
 //        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
 //            System.out.println(glGetString(GL_VERSION));

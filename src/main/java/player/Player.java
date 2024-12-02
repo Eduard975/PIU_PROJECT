@@ -16,7 +16,7 @@ public class Player {
     private VertexArray mesh;
     private Texture texture;
 
-    private ArrayList<Projectile> projectiles = new ArrayList<>();
+    public ArrayList<Projectile> projectiles = new ArrayList<>();
 
     private float angle;
     private Vector3f position = new Vector3f();
