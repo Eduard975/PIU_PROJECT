@@ -9,6 +9,8 @@ import math.Vector3f;
 public class Slime extends EnemyBase {
 
     public Slime(){
+        attackDamage = 15;
+        attackCooldown = 4000;
         position = new Vector3f();
 
         float[] vertices = new float[] {

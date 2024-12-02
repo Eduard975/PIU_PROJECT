@@ -2,6 +2,7 @@ package main;
 
 import entities.EnemyBase;
 import math.Vector3f;
+import player.Player;
 import player.Projectile;
 
 import java.util.ArrayList;
@@ -25,6 +26,20 @@ public class CollisionManager {
                     projectileIterator.remove();
                     break;
                 }
+            }
+        }
+    }
+
+    public void checkPlayerEnemyCollision(Player player, ArrayList<EnemyBase> enemies){
+        Vector3f playerMin = player.getMinBounds();
+        Vector3f playerMax = player.getMaxBounds();
+        for(EnemyBase enemy: enemies){
+            Vector3f enemyMin = enemy.getMinBounds();
+            Vector3f enemyMax = enemy.getMaxBounds();
+
+            if (playerMin.x > enemyMin.x && playerMin.x < enemyMax.x &&
+                    playerMax.y > enemyMin.y && playerMin.y < enemyMax.y) {
+                player.hp -=  enemy.attackDamage;
             }
         }
     }

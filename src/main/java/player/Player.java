@@ -19,6 +19,7 @@ public class Player {
 
     private float speed = SIZE/2;
 
+
     public ArrayList<Projectile> projectiles = new ArrayList<>();
 
     private float angle;
@@ -26,7 +27,7 @@ public class Player {
 
     long windowId = GLFW.glfwGetCurrentContext();
 
-    public int hp = 100;
+    public float hp = 100;
     public int mp = 25;
 
     public Player(){
@@ -107,5 +108,13 @@ public class Player {
 
     public float getY() {
         return position.y;
+    }
+
+    public Vector3f getMinBounds() {
+        return new Vector3f(position.x - SIZE / 2, position.y - SIZE / 2, 0);
+    }
+
+    public Vector3f getMaxBounds() {
+        return new Vector3f(position.x + SIZE / 2, position.y + SIZE / 2, 0);
     }
 }

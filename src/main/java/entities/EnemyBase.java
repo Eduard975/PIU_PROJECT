@@ -13,11 +13,14 @@ public abstract class EnemyBase {
     public float SIZE = Level.TILE_SIZE/2.0f;
     public VertexArray mesh;
     public Texture texture;
-    public int hp = 100;
+    public float hp = 100;
 
     public int angle;
 
     public Vector3f position;
+
+    public int attackDamage;
+    public int attackCooldown;
 
 
     abstract public void update();

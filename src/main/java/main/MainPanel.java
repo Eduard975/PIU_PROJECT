@@ -148,6 +148,8 @@ public class MainPanel implements Runnable {
         enemyManager.enemies.forEach(e -> System.out.println(e.hp));
         camera.update();
 
+        collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
+        System.out.println("Player hp: " + player.hp);
 //        long windowId = GLFW.glfwGetCurrentContext();
 //        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
 //            System.out.println(glGetString(GL_VERSION));
