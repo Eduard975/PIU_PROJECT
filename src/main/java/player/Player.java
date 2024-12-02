@@ -3,6 +3,7 @@ package player;
 import graphic.Texture;
 import graphic.VertexArray;
 import graphic.Shader;
+import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -53,15 +54,27 @@ public class Player {
     public void update(){
         if (glfwGetKey(windowId, GLFW_KEY_DOWN) == GLFW_PRESS) {
             position.y--;
+            if(position.y < -Level.yBounds){
+                position.y = -Level.yBounds;
+            }
         }
         if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
             position.y++;
+            if(position.y > Level.yBounds){
+                position.y = Level.yBounds;
+            }
         }
         if (glfwGetKey(windowId, GLFW_KEY_LEFT) == GLFW_PRESS) {
             position.x--;
+            if(position.x < -Level.xBounds){
+                position.x = -Level.xBounds;
+            }
         }
         if (glfwGetKey(windowId, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             position.x++;
+            if(position.x > Level.xBounds){
+                position.x = Level.xBounds;
+            }
         }
         if (glfwGetKey(windowId, GLFW_KEY_E) == GLFW_PRESS) {
             angle++;
@@ -82,5 +95,15 @@ public class Player {
             projectile.render();
         }
         Shader.PLAYER.disable();
+    }
+
+
+
+    public float getX() {
+        return position.x;
+    }
+
+    public float getY() {
+        return position.y;
     }
 }

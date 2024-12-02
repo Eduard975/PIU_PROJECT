@@ -36,6 +36,7 @@ public class MainPanel implements Runnable {
 
     private CollisionManager collisionManager;
 
+    private Camera camera;
 
     public void start() {
         init();
@@ -63,13 +64,22 @@ public class MainPanel implements Runnable {
             throw new IllegalStateException("Unable to initialize GLFW!");
         }
 
+
         window = new Window(640, 480, "NecroLord");
         running = true;
+
+        player = new Player();
+        level = new Level(player);
+        collisionManager = new CollisionManager();
+        enemyManager = new EnemyManager();
+        enemyManager.addEnemy();
+
+        camera = new Camera(new Vector3f(0, 0, 0), player);
 
         glActiveTexture(GL_TEXTURE1);
         Shader.loadAll();
 
-        Matrix4f pr_matrix = Matrix4f.orthographic(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f );
+        Matrix4f pr_matrix = camera.getProjectionMatrix();
 
         Shader.BACKGROUND.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.BACKGROUND.setUniform1i("tex", 1);
@@ -82,12 +92,6 @@ public class MainPanel implements Runnable {
 
         Shader.PROJECTILE.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.PROJECTILE.setUniform1i("tex", 1);
-
-        level = new Level();
-        player = new Player();
-        collisionManager = new CollisionManager();
-        enemyManager = new EnemyManager();
-        enemyManager.addEnemy();
     }
 
 
@@ -142,6 +146,8 @@ public class MainPanel implements Runnable {
         collisionManager.checkProjectilesCollision(player.projectiles,enemyManager.enemies);
         enemyManager.update();
         enemyManager.enemies.forEach(e -> System.out.println(e.hp));
+        camera.update();
+
 //        long windowId = GLFW.glfwGetCurrentContext();
 //        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
 //            System.out.println(glGetString(GL_VERSION));
