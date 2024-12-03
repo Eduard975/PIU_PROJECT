@@ -28,6 +28,9 @@ public class EnemyManager {
     }
 
     public void update(){
+
+
+
         ArrayList<EnemyBase> enemiesToRemove = new ArrayList<>();
 
         for (EnemyBase e : enemies) {

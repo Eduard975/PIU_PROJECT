@@ -3,12 +3,15 @@ package player;
 import graphic.Texture;
 import graphic.VertexArray;
 import graphic.Shader;
+import graphic.Window;
+import main.MouseInput;
 import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -25,10 +28,22 @@ public class Player {
     private float angle;
     private Vector3f position = new Vector3f();
 
+    private AbilityBase[] abilities;
+
     long windowId = GLFW.glfwGetCurrentContext();
 
     public float hp = 100;
     public int mp = 25;
+
+    private long lastFiredTime = 0;
+
+    private static final int FIRE_COOLDOWN = 2000;
+
+    public void initAbilities(){
+        abilities = new AbilityBase[] {
+                new ProjectileAbility(5,2000,this),
+        };
+    }
 
     public Player(){
         float[] vertices = new float[] {
@@ -52,9 +67,11 @@ public class Player {
 
         mesh = new VertexArray(vertices, indices, tcs);
         texture = new Texture("src/main/resources/player.png");
+
+        initAbilities();
     }
 
-    public void update(){
+    public void update( ){
         if (glfwGetKey(windowId, GLFW_KEY_DOWN) == GLFW_PRESS) {
             position.y -= speed;
             if(position.y < -Level.yBounds){
@@ -67,26 +84,46 @@ public class Player {
                 position.y = Level.yBounds;
             }
         }
+
         if (glfwGetKey(windowId, GLFW_KEY_LEFT) == GLFW_PRESS) {
             position.x -= speed;
             if(position.x < -Level.xBounds){
                 position.x = -Level.xBounds;
             }
         }
+
         if (glfwGetKey(windowId, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             position.x += speed;
             if(position.x > Level.xBounds){
                 position.x = Level.xBounds;
             }
         }
+
         if (glfwGetKey(windowId, GLFW_KEY_E) == GLFW_PRESS) {
-            angle++;
-            projectiles.add(new Projectile(position, angle));
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastFiredTime >= FIRE_COOLDOWN) {
+                if (abilities[0].canUse(mp)) {
+                    abilities[0].use(mp);
+                    mp -= abilities[0].getCost();
+                }
+            }
         }
 
         for(Projectile projectile : projectiles){
             projectile.update();
         }
+
+
+//        float deltaX = mouseX - position.x;
+//        float deltaY = mouseY - position.y;
+//
+//        float radians = (float) Math.atan2(deltaY, deltaX);
+//        angle = (float) Math.toDegrees(radians);
+//
+//        if (angle < 0) {
+//            angle += 360;
+//        }
+//        System.out.println(angle);
     }
 
     public void render() {
@@ -102,11 +139,19 @@ public class Player {
 
 
 
-    public float getX() {
+    public Vector3f getPosition() {
+        return position;
+    }
+
+    public float getAngle() {
+        return angle;
+    }
+
+    public float getX(){
         return position.x;
     }
 
-    public float getY() {
+    public float getY(){
         return position.y;
     }
 

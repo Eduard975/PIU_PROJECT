@@ -4,6 +4,7 @@ package main;
 import entities.EnemyManager;
 import entities.Slime;
 import math.Vector3f;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import player.Player;
 import graphic.Shader;
 import graphic.Window;
@@ -37,6 +38,9 @@ public class MainPanel implements Runnable {
     private CollisionManager collisionManager;
 
     private Camera camera;
+
+    private MouseInput cursorPos;
+
 
     public void start() {
         init();
@@ -74,7 +78,10 @@ public class MainPanel implements Runnable {
         enemyManager = new EnemyManager();
         enemyManager.addEnemy();
 
+
         camera = new Camera(new Vector3f(0, 0, 0), player);
+
+        glfwSetCursorPosCallback(window.id, cursorPos = new MouseInput());
 
         glActiveTexture(GL_TEXTURE1);
         Shader.loadAll();
@@ -129,7 +136,7 @@ public class MainPanel implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 if (RENDER_TIME) {
-                    System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
+//                    System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
                 }
                 frames = 0;
                 ticks = 0;
@@ -141,19 +148,16 @@ public class MainPanel implements Runnable {
 
     private void update() {
         window.update();
+//        Vector3f mousePos = cursorPos.getMousePosition();
         player.update();
         level.update();
-        collisionManager.checkProjectilesCollision(player.projectiles,enemyManager.enemies);
+        collisionManager.checkProjectilesCollision(player.projectiles, enemyManager.enemies);
         enemyManager.update();
-        enemyManager.enemies.forEach(e -> System.out.println(e.hp));
+//        enemyManager.enemies.forEach(e -> System.out.println(e.hp));
         camera.update();
 
         collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
-        System.out.println("Player hp: " + player.hp);
-//        long windowId = GLFW.glfwGetCurrentContext();
-//        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
-//            System.out.println(glGetString(GL_VERSION));
-//        }
+//        System.out.println("Player hp: " + player.hp);
     }
 
     private void render() {

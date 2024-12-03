@@ -9,7 +9,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-    private final long id;
+    public final long id;
     private final GLFWKeyCallback keyCallback;
 
     public static final int WIDTH = 1280;

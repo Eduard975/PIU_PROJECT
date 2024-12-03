@@ -8,7 +8,7 @@ import math.Matrix4f;
 import math.Vector3f;
 
 public class Projectile {
-    private float SIZE = Level.TILE_SIZE/2.0f;
+    private float SIZE = Level.TILE_SIZE/8.0f;
     private VertexArray mesh;
     private Texture texture;
 
@@ -41,7 +41,7 @@ public class Projectile {
         };
 
         mesh = new VertexArray(vertices, indices, tcs);
-        texture = new Texture("src/main/resources/player.png");
+        texture = new Texture("src/main/resources/projectile.png");
     }
 
     public void update(){
