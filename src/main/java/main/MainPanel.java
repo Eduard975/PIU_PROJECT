@@ -76,7 +76,6 @@ public class MainPanel implements Runnable {
         level = new Level(player);
         collisionManager = new CollisionManager();
         enemyManager = new EnemyManager();
-        enemyManager.addEnemy();
 
 
         camera = new Camera(new Vector3f(0, 0, 0), player);

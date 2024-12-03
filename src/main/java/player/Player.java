@@ -35,10 +35,6 @@ public class Player {
     public float hp = 100;
     public int mp = 25;
 
-    private long lastFiredTime = 0;
-
-    private static final int FIRE_COOLDOWN = 2000;
-
     public void initAbilities(){
         abilities = new AbilityBase[] {
                 new ProjectileAbility(5,2000,this),
@@ -100,30 +96,16 @@ public class Player {
         }
 
         if (glfwGetKey(windowId, GLFW_KEY_E) == GLFW_PRESS) {
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - lastFiredTime >= FIRE_COOLDOWN) {
                 if (abilities[0].canUse(mp)) {
                     abilities[0].use(mp);
                     mp -= abilities[0].getCost();
                 }
-            }
         }
 
         for(Projectile projectile : projectiles){
             projectile.update();
         }
 
-
-//        float deltaX = mouseX - position.x;
-//        float deltaY = mouseY - position.y;
-//
-//        float radians = (float) Math.atan2(deltaY, deltaX);
-//        angle = (float) Math.toDegrees(radians);
-//
-//        if (angle < 0) {
-//            angle += 360;
-//        }
-//        System.out.println(angle);
     }
 
     public void render() {

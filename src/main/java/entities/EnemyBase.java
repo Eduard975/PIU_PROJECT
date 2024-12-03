@@ -15,6 +15,9 @@ public abstract class EnemyBase {
     public Texture texture;
     public float hp = 100;
 
+    public EnemyBase(Vector3f pos) {
+        position = pos;
+    }
 
     public int angle;
 
