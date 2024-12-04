@@ -157,6 +157,11 @@ public class MainPanel implements Runnable {
 
         collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
 //        System.out.println("Player hp: " + player.hp);
+
+//
+//        Vector3f mousePos = cursorPos.getMousePosition();
+//
+//        System.out.println("Mouse X: " + mousePos.x + ", Mouse Y: " + mousePos.y);
     }
 
     private void render() {
