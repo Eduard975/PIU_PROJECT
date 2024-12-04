@@ -87,6 +87,13 @@ public class Matrix4f {
         return m;
     }
 
+    public static Matrix4f scale(Vector3f vector) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.elements[0] = vector.x;
+        matrix.elements[5] = vector.y;
+        matrix.elements[10] = vector.z;
+        return matrix;
+    }
 
     public FloatBuffer toFloatBuffer() {
         return BufferUtils.createFloatBuffer(elements);

@@ -20,7 +20,8 @@ public class Player {
     private VertexArray mesh;
     private Texture texture;
 
-    private float speed = SIZE/16;
+    private float speed = SIZE/2;
+
 
     public ArrayList<Projectile> projectiles = new ArrayList<>();
 
@@ -32,6 +33,8 @@ public class Player {
     long windowId = GLFW.glfwGetCurrentContext();
 
     public float hp = 100;
+    public float maxHp = 100;
+
     public int mp = 25;
     public int maxMp = 25;
 
