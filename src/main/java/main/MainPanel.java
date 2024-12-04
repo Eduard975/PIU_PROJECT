@@ -43,6 +43,8 @@ public class MainPanel implements Runnable {
 
     private MouseInput cursorPos;
 
+    private HUD hud;
+
     private SpriteSheet spriteSheet;
 
 
@@ -72,7 +74,6 @@ public class MainPanel implements Runnable {
             throw new IllegalStateException("Unable to initialize GLFW!");
         }
 
-        //spriteSheet = new SpriteSheet(new Texture("resources/slime.png"), 64,64, 24, 0);
 
         window = new Window("NecroLord");
         running = true;
@@ -81,7 +82,7 @@ public class MainPanel implements Runnable {
         level = new Level(player);
         collisionManager = new CollisionManager();
         enemyManager = new EnemyManager();
-
+        hud = new HUD(player);
 
         camera = new Camera(new Vector3f(0, 0, 0), player);
 
@@ -103,6 +104,9 @@ public class MainPanel implements Runnable {
 
         Shader.PROJECTILE.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.PROJECTILE.setUniform1i("tex", 1);
+
+        Shader.HP.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.MP.setUniformMat4f("pr_matrix", pr_matrix);
     }
 
 
@@ -161,6 +165,7 @@ public class MainPanel implements Runnable {
         camera.update();
 
         collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
+        System.out.println("Player hp: " + player.hp);
 //        System.out.println("Player hp: " + player.hp);
 
 //
@@ -174,5 +179,6 @@ public class MainPanel implements Runnable {
         level.render();
         player.render();
         enemyManager.render();
+        hud.render();
     }
 }

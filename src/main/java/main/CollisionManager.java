@@ -33,6 +33,7 @@ public class CollisionManager {
     public void checkPlayerEnemyCollision(Player player, ArrayList<EnemyBase> enemies){
         Vector3f playerMin = player.getMinBounds();
         Vector3f playerMax = player.getMaxBounds();
+
         for(EnemyBase enemy: enemies){
             Vector3f enemyMin = enemy.getMinBounds();
             Vector3f enemyMax = enemy.getMaxBounds();

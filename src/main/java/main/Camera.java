@@ -44,8 +44,6 @@ public class Camera {
             newY = playerY;
         }
 
-
-
         setPosition(new Vector3f(newX, newY, 0));
 
         Matrix4f pr_matrix = getProjectionMatrix();
