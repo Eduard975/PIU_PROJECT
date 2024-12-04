@@ -17,6 +17,18 @@ public class DeadEnemy {
     public Sprite sprite;
     public Vector2f[] texCoords;
 
+    public float[] tcs;
+
+    private SpriteSheet spriteSheet;
+    private int animationFrame = 1;
+    private int totalFrames;
+    private long frameDuration = 100; // 100ms per frame
+    private long lastFrameTime;
+    private boolean animationComplete = false;
+
+    float scaleX = 1f;  // Scale 50% of the original width
+    float scaleY = 1f;  // Scale 50% of the original height
+
     public DeadEnemy(Vector3f enemyPosition) {
         position = new Vector3f(enemyPosition.x, enemyPosition.y, enemyPosition.z);
 
@@ -32,42 +44,77 @@ public class DeadEnemy {
                 2, 3, 0
         };
 
-
         int width = 25;
         int height = 25;
 
         int offsetX = (64 - width) / 2;
         int offsetY = (64 - height) / 2;
 
-        SpriteSheet spriteSheet = new SpriteSheet(
-                new Texture("src/main/resources/slime.png"),
-                64, 64, 24, 0
+        // Load the sprite sheet with the death animation frames
+        spriteSheet = new SpriteSheet(
+                new Texture("src/main/resources/slime_death.png"),
+                64, 64, 0 // Automatically calculate number of sprites
         );
 
+        totalFrames = spriteSheet.getSpriteNum(); // Assume all frames in the sprite sheet are for the animation
+
+        // Initialize first frame
         sprite = spriteSheet.getSpriteWithOffset(
-                18, offsetX, offsetY,
-                width, height
+                0, offsetX, offsetY, width, height
         );
-
         texture = sprite.getTexture();
         texCoords = sprite.getTexCoords();
-
-        float[] tcs = new float[]{
-                texCoords[3].x, texCoords[3].y, // Top-left
-                texCoords[2].x, texCoords[2].y, // Bottom-left
-                texCoords[1].x, texCoords[1].y, // Bottom-right
-                texCoords[0].x, texCoords[0].y  // Top-right
-        };
+        tcs = sprite.getTcs();
 
         mesh = new VertexArray(vertices, indices, tcs);
+        lastFrameTime = System.currentTimeMillis();
+    }
+
+    private void updateSprite(int frameIndex, int offsetX, int offsetY, int width, int height) {
+        sprite = spriteSheet.getSpriteWithOffset(
+                frameIndex, offsetX, offsetY, width, height
+        );
+        texture = sprite.getTexture();
+        texCoords = sprite.getTexCoords();
+        tcs = sprite.getTcs();
+
+        mesh.updateTexCoords(tcs);
+    }
+
+    public void update() {
+        if (animationComplete) return;
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastFrameTime >= frameDuration) {
+            animationFrame++;
+            lastFrameTime = currentTime;
+
+            if (animationFrame >= totalFrames) {
+                animationFrame = totalFrames - 1; // Keep last frame
+                animationComplete = true;
+            } else {
+                // Update the sprite to the next frame
+                if (animationFrame > 5) {
+                    scaleY -= 0.1f;
+                    updateSprite(animationFrame, (64 - 32) / 2, (64 - 20) / 2, 32, 20);
+                } else
+                    updateSprite(animationFrame, (64 - 25) / 2, (64 - 25) / 2, 25, 25);
+            }
+        }
     }
 
     public void render() {
         Shader.SLIME.enable();
-        Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(90.0f)));
+
+        Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.scale(scaleX, scaleY, 1.0f)));
+
         texture.bind();
         mesh.render();
         Shader.SLIME.disable();
+    }
+
+    public boolean isAnimationComplete() {
+        return animationComplete;
     }
 
     public Vector3f getMinBounds() {

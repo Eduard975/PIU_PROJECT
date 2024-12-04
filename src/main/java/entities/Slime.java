@@ -51,7 +51,7 @@ public class Slime extends EnemyBase {
 
         spriteSheet = new SpriteSheet(
                 new Texture("src/main/resources/slime.png"),
-                64, 64, 24, 0 // Adjust these values to match your spritesheet
+                defaultSpriteWidth, defaultSpriteHeight, 0
         );
 
         totalFrames = spriteSheet.getSpriteNum(); // Number of frames in the animation
@@ -64,13 +64,7 @@ public class Slime extends EnemyBase {
 
         texture = sprite.getTexture();
         texCoords = sprite.getTexCoords();
-
-        float[] tcs = new float[]{
-                texCoords[3].x, texCoords[3].y, // Top-left
-                texCoords[2].x, texCoords[2].y, // Bottom-left
-                texCoords[1].x, texCoords[1].y, // Bottom-right
-                texCoords[0].x, texCoords[0].y  // Top-right
-        };
+        tcs = sprite.getTcs();
 
         mesh = new VertexArray(vertices, indices, tcs);
     }
@@ -86,13 +80,7 @@ public class Slime extends EnemyBase {
             // Update the sprite for the current frame
             sprite = spriteSheet.getSpriteWithOffset(currentFrame, offsetX, offsetY, spriteWidth, spriteHeight);
             texCoords = sprite.getTexCoords();
-
-            float[] tcs = new float[]{
-                    texCoords[3].x, texCoords[3].y, // Top-left
-                    texCoords[2].x, texCoords[2].y, // Bottom-left
-                    texCoords[1].x, texCoords[1].y, // Bottom-right
-                    texCoords[0].x, texCoords[0].y  // Top-right
-            };
+            tcs = sprite.getTcs();
 
             // Update texture coordinates in the mesh
             mesh.updateTexCoords(tcs);

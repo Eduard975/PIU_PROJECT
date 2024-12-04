@@ -18,6 +18,7 @@ public class Matrix4f {
 
     }
 
+
     public static Matrix4f identity() {
         Matrix4f m = new Matrix4f();
 
@@ -27,6 +28,17 @@ public class Matrix4f {
         m.elements[5] = 1.0f;
         m.elements[10] = 1.0f;
         m.elements[15] = 1.0f;
+
+        return m;
+    }
+
+    public static Matrix4f scale(float sx, float sy, float sz) {
+        Matrix4f m = identity();
+
+        // Set scaling values
+        m.elements[0] = sx; // Scale X axis
+        m.elements[5] = sy; // Scale Y axis
+        m.elements[10] = sz; // Scale Z axis
 
         return m;
     }

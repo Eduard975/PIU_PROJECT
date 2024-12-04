@@ -32,8 +32,15 @@ public class EnemyManager {
     public void render() {
         for (EnemyBase enemy : enemies)
             enemy.render();
-        for (DeadEnemy deadEnemy : deadEnemies)
-            deadEnemy.render();
+
+        for (DeadEnemy deadEnemy : deadEnemies) {
+            if (!deadEnemy.isAnimationComplete()) {
+                deadEnemy.render();
+                deadEnemy.update();
+            } else {
+                deadEnemy.render();
+            }
+        }
     }
 
     public void spawnRandomEnemy() {

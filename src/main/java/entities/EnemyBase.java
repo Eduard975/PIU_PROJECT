@@ -13,6 +13,7 @@ public abstract class EnemyBase {
     public VertexArray mesh;
     public Texture texture;
     public Vector2f[] texCoords;
+    public float[] tcs;
     public Sprite sprite;
     public float hp = 100;
 

@@ -9,35 +9,41 @@ public class SpriteSheet {
     private Texture texture;
     private List<Sprite> sprites;
 
-    public SpriteSheet(Texture texture, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
+    public SpriteSheet(Texture texture, int spriteWidth, int spriteHeight, int spacing) {
         this.sprites = new ArrayList<>();
 
         this.texture = texture;
+
+        int spritesPerRow = (texture.getWidth() + spacing) / (spriteWidth + spacing);
+        int spritesPerColumn = (texture.getHeight() + spacing) / (spriteHeight + spacing);
+
         int currentX = 0;
         int currentY = texture.getHeight() - spriteHeight;
-        for (int i = 0; i < numSprites; i++) {
-            // Calculate full sprite texture coordinates
-            float topY = (currentY + spriteHeight) / (float) texture.getHeight();
-            float rightX = (currentX + spriteWidth) / (float) texture.getWidth();
-            float leftX = currentX / (float) texture.getWidth();
-            float bottomY = currentY / (float) texture.getHeight();
 
-            Vector2f[] texCoords = {
-                    new Vector2f(rightX, topY),
-                    new Vector2f(rightX, bottomY),
-                    new Vector2f(leftX, bottomY),
-                    new Vector2f(leftX, topY)
-            };
-            Sprite sprite = new Sprite(this.texture, texCoords);
-            this.sprites.add(sprite);
+        for (int row = 0; row < spritesPerColumn; row++) {
+            for (int col = 0; col < spritesPerRow; col++) {
+                // Calculate full sprite texture coordinates
+                float topY = (currentY + spriteHeight) / (float) texture.getHeight();
+                float rightX = (currentX + spriteWidth) / (float) texture.getWidth();
+                float leftX = currentX / (float) texture.getWidth();
+                float bottomY = currentY / (float) texture.getHeight();
 
-            currentX += spriteWidth + spacing;
-            if (currentX >= texture.getWidth()) {
-                currentX = 0;
-                currentY -= spriteHeight + spacing;
+                Vector2f[] texCoords = {
+                        new Vector2f(rightX, topY),
+                        new Vector2f(rightX, bottomY),
+                        new Vector2f(leftX, bottomY),
+                        new Vector2f(leftX, topY)
+                };
+                Sprite sprite = new Sprite(this.texture, texCoords);
+                this.sprites.add(sprite);
+
+                currentX += spriteWidth + spacing;
             }
+            currentX = 0;
+            currentY -= spriteHeight + spacing;
         }
     }
+
 
     public Sprite getSprite(int index) {
         return this.sprites.get(index);
