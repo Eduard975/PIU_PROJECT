@@ -3,6 +3,8 @@ package main;
 
 import entities.EnemyManager;
 import entities.Slime;
+import graphic.SpriteSheet;
+import graphic.Texture;
 import math.Vector3f;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import player.Player;
@@ -41,6 +43,8 @@ public class MainPanel implements Runnable {
 
     private MouseInput cursorPos;
 
+    private SpriteSheet spriteSheet;
+
 
     public void start() {
         init();
@@ -68,6 +72,7 @@ public class MainPanel implements Runnable {
             throw new IllegalStateException("Unable to initialize GLFW!");
         }
 
+        //spriteSheet = new SpriteSheet(new Texture("resources/slime.png"), 64,64, 24, 0);
 
         window = new Window("NecroLord");
         running = true;

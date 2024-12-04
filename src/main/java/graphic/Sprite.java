@@ -1,89 +1,33 @@
-
 package graphic;
 
-public final class Sprite {
-    private final String name;
-    private final int x;
-    private final int y;
-    private final int w;
-    private final int h;
+import org.joml.Vector2f;
 
-    public Sprite(String name, int x, int y, int w, int h) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
+public class Sprite {
+
+    private Texture texture;
+    private Vector2f[] texCoords;
+
+    public Sprite(Texture texture) {
+        this.texture = texture;
+        Vector2f[] texCoords = {
+                new Vector2f(1, 1),
+                new Vector2f(1, 0),
+                new Vector2f(0, 0),
+                new Vector2f(0, 1)
+        };
+        this.texCoords = texCoords;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Sprite sprite = (Sprite) o;
-
-        if (h != sprite.h) {
-            return false;
-        }
-        if (w != sprite.w) {
-            return false;
-        }
-        if (x != sprite.x) {
-            return false;
-        }
-        if (y != sprite.y) {
-            return false;
-        }
-        if (name != null ? !name.equals(sprite.name) : sprite.name != null) {
-            return false;
-        }
-
-        return true;
+    public Sprite(Texture texture, Vector2f[] texCoords) {
+        this.texture = texture;
+        this.texCoords = texCoords;
     }
 
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + w;
-        result = 31 * result + h;
-        return result;
+    public Texture getTexture() {
+        return this.texture;
     }
 
-    @Override
-    public String toString() {
-        return "Sprite{" +
-                "name='" + name + '\'' +
-                ", x=" + x +
-                ", y=" + y +
-                ", w=" + w +
-                ", h=" + h +
-                '}';
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getWidth() {
-        return w;
-    }
-
-    public int getHeight() {
-        return h;
+    public Vector2f[] getTexCoords() {
+        return this.texCoords;
     }
 }

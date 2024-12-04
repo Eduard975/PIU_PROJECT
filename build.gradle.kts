@@ -1,5 +1,5 @@
-import org.gradle.internal.os.OperatingSystem
-
+import java.util.*
+import java.util.Locale
 
 plugins {
     id("java")
@@ -15,27 +15,21 @@ tasks.test {
 val lwjglVersion = "3.3.4"
 val jomlVersion = "1.10.7"
 
-val lwjglNatives = Pair(
-    System.getProperty("os.name")!!,
-    System.getProperty("os.arch")!!
-).let { (name, arch) ->
+// Function to detect OS and architecture for LWJGL natives
+val lwjglNatives = run {
+    val os = System.getProperty("os.name").lowercase(Locale.getDefault())
+    val arch = System.getProperty("os.arch")
     when {
-        arrayOf("Linux", "SunOS", "Unit").any { name.startsWith(it) } ->
-            if (arrayOf("arm", "aarch64").any { arch.startsWith(it) })
-                "natives-linux${if (arch.contains("64") || arch.startsWith("armv8")) "-arm64" else "-arm32"}"
-            else if (arch.startsWith("ppc"))
-                "natives-linux-ppc64le"
-            else if (arch.startsWith("riscv"))
-                "natives-linux-riscv64"
-            else
-                "natives-linux"
-        arrayOf("Windows").any { name.startsWith(it) }                ->
-            "natives-windows"
-        else                                                                            ->
-            throw Error("Unrecognized or unsupported platform. Please set \"lwjglNatives\" manually")
+        os.contains("win") -> "natives-windows"
+        os.contains("mac") -> "natives-macos"
+        os.contains("nix") || os.contains("nux") || os.contains("aix") -> {
+            if (arch.startsWith("arm") || arch.startsWith("aarch64")) {
+                if (arch.contains("64") || arch.startsWith("armv8")) "natives-linux-arm64" else "natives-linux-arm32"
+            } else "natives-linux"
+        }
+        else -> throw Error("Unrecognized or unsupported platform. Please set \"lwjglNatives\" manually.")
     }
 }
-
 
 repositories {
     mavenCentral()
@@ -47,7 +41,6 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    implementation("org.jdom:jdom:1.1.3")
     implementation("org.lwjgl", "lwjgl")
     implementation("org.lwjgl", "lwjgl-assimp")
     implementation("org.lwjgl", "lwjgl-bgfx")

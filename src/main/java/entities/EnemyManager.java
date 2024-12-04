@@ -14,40 +14,41 @@ public class EnemyManager {
 
     private long lastSpawnTime = 0;
 
-    public EnemyManager(){
+    public EnemyManager() {
         enemies = new ArrayList<>();
         deadEnemies = new ArrayList<>();
     }
 
-    public void addEnemy(Vector3f pos){
+    public void addEnemy(Vector3f pos) {
         enemies.add(new Slime(pos));
+
     }
 
-    public void removeEnemy(EnemyBase e){
+    public void removeEnemy(EnemyBase e) {
         enemies.remove(e);
         deadEnemies.add(new DeadEnemy(e.position));
     }
 
-    public void render(){
-        for( EnemyBase enemy : enemies)
+    public void render() {
+        for (EnemyBase enemy : enemies)
             enemy.render();
-        for( DeadEnemy deadEnemy : deadEnemies)
+        for (DeadEnemy deadEnemy : deadEnemies)
             deadEnemy.render();
     }
 
-    public void spawnRandomEnemy(){
+    public void spawnRandomEnemy() {
         long currentTime = System.currentTimeMillis();
-        if(currentTime - lastSpawnTime >= spawnCooldown){
+        if (currentTime - lastSpawnTime >= spawnCooldown) {
             Random rand = new Random();
             float enemyX = -Level.xBounds + (rand.nextFloat() * Level.xBounds);
             float enemyY = -Level.yBounds + (rand.nextFloat() * Level.yBounds);
-            addEnemy(new Vector3f(enemyX,enemyY,0.2f));
+            addEnemy(new Vector3f(enemyX, enemyY, 0.2f));
             lastSpawnTime = currentTime;
             System.out.println("Spawning enemies");
         }
     }
 
-    public void update(){
+    public void update() {
 
         spawnRandomEnemy();
 
@@ -60,7 +61,7 @@ public class EnemyManager {
             }
         }
 
-        for(EnemyBase enemy:enemiesToRemove){
+        for (EnemyBase enemy : enemiesToRemove) {
             removeEnemy(enemy);
         }
     }

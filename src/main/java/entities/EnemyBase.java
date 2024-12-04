@@ -1,18 +1,19 @@
 package entities;
 
-import graphic.Shader;
+import graphic.Sprite;
 import graphic.Texture;
 import graphic.VertexArray;
 import map.Level;
-import math.Matrix4f;
 import math.Vector3f;
-
-import static org.lwjgl.glfw.GLFW.*;
+import org.joml.Vector2f;
 
 public abstract class EnemyBase {
-    public float SIZE = Level.TILE_SIZE/2.0f;
+    public float SIZE = Level.TILE_SIZE / 2.0f;
+
     public VertexArray mesh;
     public Texture texture;
+    public Vector2f[] texCoords;
+    public Sprite sprite;
     public float hp = 100;
 
     public EnemyBase(Vector3f pos) {

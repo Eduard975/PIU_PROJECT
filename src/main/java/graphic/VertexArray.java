@@ -1,11 +1,13 @@
 package graphic;
 
+import utils.BufferUtils;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-
-import utils.BufferUtils;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class VertexArray {
 
@@ -63,6 +65,13 @@ public class VertexArray {
         else
             glDrawArrays(GL_TRIANGLES, 0, count);
     }
+
+    public void updateTexCoords(float[] textureCoordinates) {
+        glBindBuffer(GL_ARRAY_BUFFER, tbo);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, BufferUtils.createFloatBuffer(textureCoordinates));
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
 
     public void render() {
         bind();
