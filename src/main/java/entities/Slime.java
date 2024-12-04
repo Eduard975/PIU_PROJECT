@@ -33,7 +33,7 @@ public class Slime extends EnemyBase {
         };
 
         mesh = new VertexArray(vertices, indices, tcs);
-        texture = new Texture("src/main/resources/player.png");
+        texture = new Texture("src/main/resources/enemy.png");
     }
 
     @Override

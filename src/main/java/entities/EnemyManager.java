@@ -52,7 +52,7 @@ public class EnemyManager {
 
         for (EnemyBase e : enemies) {
             e.update();
-            if (e.hp < 0) {
+            if (e.hp <= 0) {
                 enemiesToRemove.add(e);
             }
         }

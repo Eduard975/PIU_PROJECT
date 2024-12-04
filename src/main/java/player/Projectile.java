@@ -15,7 +15,7 @@ public class Projectile {
     private float angle;
     private Vector3f position;
 
-    public float damage = 10;
+    public float damage = 100;
 
     public Projectile(Vector3f playerPosition, float playerAngle) {
         angle = playerAngle;
@@ -45,7 +45,7 @@ public class Projectile {
     }
 
     public void update(){
-        position.x++;
+        position.x+=10;
     }
 
     public void render() {

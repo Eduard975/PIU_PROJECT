@@ -38,7 +38,7 @@ public class DeadEnemy {
         };
 
         mesh = new VertexArray(vertices, indices, tcs);
-        texture = new Texture("src/main/resources/player.png");
+        texture = new Texture("src/main/resources/enemy.png");
     }
 
     public void render() {

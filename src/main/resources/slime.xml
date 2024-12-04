@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="slime.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="tile0000000" x="98" y="26" width="23" height="26" frameX="-22" frameY="-18" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0010000" x="25" y="29" width="24" height="27" frameX="-22" frameY="-17" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0020000" x="50" y="0" width="25" height="28" frameX="-21" frameY="-16" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0030000" x="44" y="57" width="22" height="28" frameX="-22" frameY="-16" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0040000" x="121" y="0" width="21" height="24" frameX="-22" frameY="-20" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0050000" x="22" y="86" width="22" height="25" frameX="-22" frameY="-19" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0060000" x="98" y="0" width="23" height="26" frameX="-20" frameY="-18" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0070000" x="49" y="29" width="24" height="27" frameX="-19" frameY="-17" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0080000" x="0" y="29" width="25" height="28" frameX="-19" frameY="-16" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0090000" x="66" y="57" width="22" height="28" frameX="-21" frameY="-16" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0100000" x="121" y="24" width="21" height="24" frameX="-22" frameY="-20" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0110000" x="44" y="86" width="22" height="25" frameX="-21" frameY="-19" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0120000" x="0" y="86" width="22" height="27" frameX="-22" frameY="-17" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0130000" x="75" y="0" width="23" height="28" frameX="-22" frameY="-16" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0140000" x="0" y="0" width="25" height="29" frameX="-21" frameY="-15" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0150000" x="0" y="57" width="22" height="29" frameX="-22" frameY="-15" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0160000" x="121" y="72" width="21" height="24" frameX="-22" frameY="-20" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0170000" x="66" y="86" width="22" height="25" frameX="-22" frameY="-19" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0180000" x="98" y="52" width="22" height="27" frameX="-21" frameY="-17" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0190000" x="75" y="28" width="23" height="28" frameX="-20" frameY="-16" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0200000" x="25" y="0" width="25" height="29" frameX="-19" frameY="-15" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0210000" x="22" y="57" width="22" height="29" frameX="-21" frameY="-15" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0220000" x="121" y="48" width="21" height="24" frameX="-22" frameY="-20" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="tile0230000" x="88" y="86" width="22" height="25" frameX="-21" frameY="-19" frameWidth="64" frameHeight="64"/>
+</TextureAtlas>

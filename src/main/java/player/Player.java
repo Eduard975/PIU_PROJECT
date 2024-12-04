@@ -20,8 +20,7 @@ public class Player {
     private VertexArray mesh;
     private Texture texture;
 
-    private float speed = SIZE/2;
-
+    private float speed = SIZE/16;
 
     public ArrayList<Projectile> projectiles = new ArrayList<>();
 
@@ -34,6 +33,10 @@ public class Player {
 
     public float hp = 100;
     public int mp = 25;
+    public int maxMp = 25;
+
+    public long mpRegenCooldown = 4000;
+    public long lastRegenTime = 0;
 
     public void initAbilities(){
         abilities = new AbilityBase[] {
@@ -65,6 +68,19 @@ public class Player {
         texture = new Texture("src/main/resources/player.png");
 
         initAbilities();
+    }
+
+    private boolean canRegenMp() {
+        return (mp < maxMp) && (System.currentTimeMillis() - lastRegenTime) >= mpRegenCooldown;
+    }
+
+    private void regenMP(){
+        if(!canRegenMp()){
+            return;
+        }
+        System.out.println(mp);
+        lastRegenTime = System.currentTimeMillis();
+        mp+=5;
     }
 
     public void update( ){
@@ -106,6 +122,7 @@ public class Player {
             projectile.update();
         }
 
+        regenMP();
     }
 
     public void render() {
