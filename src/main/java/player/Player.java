@@ -106,6 +106,7 @@ public class Player {
             projectile.update();
         }
 
+        System.out.println("Player X:" + position.x + "Y:" + position.y);
     }
 
     public void render() {

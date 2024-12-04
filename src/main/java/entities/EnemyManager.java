@@ -1,5 +1,6 @@
 package entities;
 
+import map.Level;
 import math.Vector3f;
 
 import java.util.ArrayList;
@@ -38,7 +39,9 @@ public class EnemyManager {
         long currentTime = System.currentTimeMillis();
         if(currentTime - lastSpawnTime >= spawnCooldown){
             Random rand = new Random();
-            addEnemy(new Vector3f(0f,rand.nextFloat() * 1000,0.2f));
+            float enemyX = -Level.xBounds + (rand.nextFloat() * Level.xBounds);
+            float enemyY = -Level.yBounds + (rand.nextFloat() * Level.yBounds);
+            addEnemy(new Vector3f(enemyX,enemyY,0.2f));
             lastSpawnTime = currentTime;
             System.out.println("Spawning enemies");
         }
