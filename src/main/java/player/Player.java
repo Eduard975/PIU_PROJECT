@@ -1,9 +1,14 @@
 package player;
 
+import entities.Ally;
+import entities.DeadEnemy;
+import entities.EnemyBase;
+import entities.EnemyManager;
 import graphic.Texture;
 import graphic.VertexArray;
 import graphic.Shader;
 import graphic.Window;
+import main.CollisionManager;
 import main.MouseInput;
 import map.Level;
 import math.Matrix4f;
@@ -24,10 +29,12 @@ public class Player {
 
 
     public ArrayList<Projectile> projectiles = new ArrayList<>();
+    public ArrayList<Ally> allies = new ArrayList<>();
 
     private float angle;
     private Vector3f position = new Vector3f();
     private Vector3f projectileDirection;
+    private Vector3f mousePosition = new Vector3f();
 
     private AbilityBase[] abilities;
 
@@ -42,13 +49,20 @@ public class Player {
     public long mpRegenCooldown = 4000;
     public long lastRegenTime = 0;
 
+    private EnemyManager enemyManager;
+    private CollisionManager collisionManager;
+
     public void initAbilities(){
         abilities = new AbilityBase[] {
                 new ProjectileAbility(5,2000,this),
+                new ResurrectAbility(10, 2000,this),
         };
     }
 
-    public Player(){
+    public Player(EnemyManager enemyManager, CollisionManager collisionManager){
+        this.enemyManager = enemyManager;
+        this.collisionManager = collisionManager;
+
         float[] vertices = new float[] {
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,
                 -SIZE / 2.0f,  SIZE / 2.0f, 0.2f,
@@ -88,27 +102,27 @@ public class Player {
     }
 
     public void update( ){
-        if (glfwGetKey(windowId, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        if (glfwGetKey(windowId, GLFW_KEY_S) == GLFW_PRESS) {
             position.y -= speed;
             if(position.y < -Level.yBounds){
                 position.y = -Level.yBounds;
             }
         }
-        if (glfwGetKey(windowId, GLFW_KEY_UP) == GLFW_PRESS) {
+        if (glfwGetKey(windowId, GLFW_KEY_W) == GLFW_PRESS) {
             position.y += speed;
             if(position.y > Level.yBounds){
                 position.y = Level.yBounds;
             }
         }
 
-        if (glfwGetKey(windowId, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        if (glfwGetKey(windowId, GLFW_KEY_A) == GLFW_PRESS) {
             position.x -= speed;
             if(position.x < -Level.xBounds){
                 position.x = -Level.xBounds;
             }
         }
 
-        if (glfwGetKey(windowId, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        if (glfwGetKey(windowId, GLFW_KEY_D) == GLFW_PRESS) {
             position.x += speed;
             if(position.x > Level.xBounds){
                 position.x = Level.xBounds;
@@ -122,8 +136,30 @@ public class Player {
                 }
         }
 
+        if (glfwGetKey(windowId, GLFW_KEY_F) == GLFW_PRESS) {
+            if (abilities[1].canUse(mp)) {
+                if(collisionManager.checkDeadEnemyMouseCollision(mousePosition, enemyManager.deadEnemies)){
+                    abilities[1].use(mp);
+                    mp -= abilities[1].getCost();
+                    enemyManager.deadEnemies.remove(ResurrectAbility.getEnemyToResurrect());
+                }
+            }
+        }
+
         for(Projectile projectile : projectiles){
             projectile.update();
+        }
+        ArrayList<Ally> alliesToRemove = new ArrayList<>();
+
+        for(Ally ally: allies){
+            ally.update();
+            if (ally.hp <= 0) {
+                alliesToRemove.add(ally);
+            }
+        }
+
+        for (Ally ally : alliesToRemove) {
+            allies.remove(ally);
         }
 
         regenMP();
@@ -136,6 +172,9 @@ public class Player {
         mesh.render();
         for(Projectile projectile : projectiles){
             projectile.render();
+        }
+        for(Ally ally: allies){
+            ally.render();
         }
         Shader.PLAYER.disable();
     }
@@ -170,11 +209,16 @@ public class Player {
         this.angle = angle;
     }
 
-    public void setProjectileDirection(Vector3f projectileDirection) {
-        this.projectileDirection = new Vector3f(projectileDirection.x - position.x, projectileDirection.y - position.y, 0.0f);
+    public void setProjectileDirection() {
+        this.projectileDirection = new Vector3f(mousePosition.x - position.x, mousePosition.y - position.y, 0.0f);
     }
 
     public Vector3f getProjectileDirection(){
         return projectileDirection;
+    }
+
+    public void setMousePosition(Vector3f mousePosition) {
+        this.mousePosition = mousePosition;
+        setProjectileDirection();
     }
 }

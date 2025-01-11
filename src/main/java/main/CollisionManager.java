@@ -1,9 +1,11 @@
 package main;
 
+import entities.DeadEnemy;
 import entities.EnemyBase;
 import math.Vector3f;
 import player.Player;
 import player.Projectile;
+import player.ResurrectAbility;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,5 +45,23 @@ public class CollisionManager {
                 player.hp -=  enemy.attackDamage;
             }
         }
+    }
+
+    public boolean checkDeadEnemyMouseCollision(Vector3f MousePosition, ArrayList<DeadEnemy> deadEnemies){
+        float mouseMinX = MousePosition.x - 5;
+        float mouseMaxX = MousePosition.x + 5;
+        float mouseMinY = MousePosition.y - 5;
+        float mouseMaxY = MousePosition.y + 5;
+
+        for(DeadEnemy enemy: deadEnemies){
+            Vector3f enemyMin = enemy.getMinBounds();
+            Vector3f enemyMax = enemy.getMaxBounds();
+            if (mouseMinX > enemyMin.x && mouseMinX < enemyMax.x &&
+                    mouseMaxY > enemyMin.y && mouseMinY< enemyMax.y) {
+                ResurrectAbility.setEnemyToResurrect(enemy);
+                return true;
+            }
+        }
+        return false;
     }
 }
