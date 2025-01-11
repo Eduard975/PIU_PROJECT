@@ -81,7 +81,6 @@ public class MainPanel implements Runnable {
         collisionManager = new CollisionManager();
         player = new Player();
         level = new Level();
-        hud = new HUD(player);
         enemyManager = new EnemyManager(player);
         abilityManager = new AbilityManager(player, enemyManager, collisionManager);
         hud = new HUD(player, abilityManager);
