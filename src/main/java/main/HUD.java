@@ -1,5 +1,6 @@
 package main;
 
+import graphic.FontRenderer;
 import graphic.Shader;
 import graphic.Texture;
 import graphic.VertexArray;
@@ -19,6 +20,8 @@ public class HUD {
     private AbilityManager abilityManager;
     private final List<AbilityBase> abilities;
 
+    private FontRenderer fontRenderer;
+
     private final Texture inventoryTexture;
 
     private final float[] hpVertices, mpVertices, xpVertices, sbVertices, iconVertices;
@@ -29,6 +32,7 @@ public class HUD {
     float iconSize = 64 * scale;
     float resourceBarHeight = 15f;
     float resourceBarWidth = 200f;
+    float resourceBarCenter = -Camera.WIDTH + 15 + (resourceBarWidth) / 2;
 
     byte[] indices = new byte[]{
             0, 1, 2,
@@ -42,9 +46,10 @@ public class HUD {
     };
 
 
-    public HUD(Player player, AbilityManager abilityManager) {
+    public HUD(Player player, AbilityManager abilityManager, FontRenderer fontRenderer) {
         this.player = player;
         this.abilityManager = abilityManager;
+        this.fontRenderer = fontRenderer;
 
         abilities = abilityManager.getAbilities();
 
@@ -106,6 +111,14 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight - 10f, 0.9f)));
         hpBar.render();
         Shader.HP.disable();
+
+        float stringWidth = fontRenderer.getStringWidth((int)player.hp + "!" + (int)player.maxHp);
+
+        float stringX = resourceBarCenter - stringWidth / 4;
+
+
+        fontRenderer.drawString((int)player.hp + "!"+(int)player.maxHp, stringX,
+                Camera.HEIGHT - resourceBarHeight - 8f, 0.5f);
     }
 
     private void drawMpBar() {
@@ -119,6 +132,13 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight * 2 - 20f, 0.9f)));
         mpBar.render();
         Shader.MP.disable();
+
+        float stringWidth = fontRenderer.getStringWidth(player.mp + "!" + player.maxMp);
+
+        float stringX = resourceBarCenter - stringWidth / 4;
+
+        fontRenderer.drawString(player.mp + "!"+player.maxMp, stringX,
+                Camera.HEIGHT - resourceBarHeight * 2 - 17f, 0.5f);
     }
 
     public void drawXpBar() {
@@ -148,6 +168,14 @@ public class HUD {
         Shader.XP.disable();
 
         Shader.XP.setUniform3f("barColor", new Vector3f(0.5f, 0.5f, 0.5f));
+
+        float stringWidth = fontRenderer.getStringWidth(player.xp + "!" + player.nextLevelXp);
+
+        float stringX = resourceBarCenter - stringWidth / 4;
+
+
+        fontRenderer.drawString(player.xp + "!" + player.nextLevelXp, stringX,
+                Camera.HEIGHT - resourceBarHeight * 4 - 12f, 0.5f);
     }
 
 

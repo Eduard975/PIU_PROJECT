@@ -2,6 +2,7 @@ package main;
 
 
 import entities.EnemyManager;
+import graphic.FontRenderer;
 import graphic.Shader;
 import graphic.SpriteSheet;
 import graphic.Window;
@@ -49,6 +50,7 @@ public class MainPanel implements Runnable {
 
     private AbilityManager abilityManager;
 
+    private FontRenderer fontRenderer;
 
     public void start() {
         init();
@@ -86,8 +88,9 @@ public class MainPanel implements Runnable {
         enemyManager = new EnemyManager(player);
 
         abilityManager = new AbilityManager(player, enemyManager, collisionManager, soundPlayer);
-        hud = new HUD(player, abilityManager);
-
+        fontRenderer = new FontRenderer(20,20);
+        fontRenderer.init();
+        hud = new HUD(player, abilityManager, fontRenderer);
         soundPlayer.setAllSoundToVolume(0.4f);
 
         camera = new Camera(new Vector3f(0, 0, 0), player);
@@ -120,6 +123,9 @@ public class MainPanel implements Runnable {
 
         Shader.ICON.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.ICON.setUniform1i("tex", 1);
+
+        Shader.TEXT.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.TEXT.setUniform1i("tex", 1);
     }
 
 
@@ -190,6 +196,7 @@ public class MainPanel implements Runnable {
         Vector3f mousePos = cursorPos.getMouseWorldPosition(camera.getProjectionMatrix(), camera.position);
         player.setAngle(cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
         player.setMousePosition(mousePos);
+
 //        System.out.println("Angle :" + cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
 
 //        System.out.println("Mouse X: " + mousePos.x + ", Mouse Y: " + mousePos.y);
