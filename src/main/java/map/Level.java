@@ -21,11 +21,14 @@ public class Level {
 
     public Level() {
 
+        float localXBound = xBounds * 2;
+        float localYBound = yBounds * 2;
+
         float[] vertices = new float[]{
-                xBounds, -yBounds, 0.0f,
-                xBounds, yBounds, 0.0f,
-                -xBounds, yBounds, 0.0f,
-                -xBounds, -yBounds, 0.0f,
+                localXBound, -localYBound, 0.0f,
+                localXBound, localYBound, 0.0f,
+                -localXBound, localYBound, 0.0f,
+                -localXBound, -localYBound, 0.0f,
         };
 
         byte[] indices = new byte[]{
