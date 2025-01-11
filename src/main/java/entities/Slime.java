@@ -101,35 +101,6 @@ public class Slime extends EnemyBase {
         }
     }
 
-
-
-    @Override
-    public void update() {
-        updateAnimation();
-        float delta = 1.0f / 60.0f;
-
-        if (targetPlayerPos == null) {
-            if (isDebug) System.out.println("No player position set");
-            return;
-        }
-
-        // Simple distance check
-        float dx = targetPlayerPos.x - position.x;
-        float dy = targetPlayerPos.y - position.y;
-        float distanceToPlayer = (float) Math.sqrt(dx * dx + dy * dy);
-
-        if (isDebug) {
-            System.out.println("Distance to player: " + distanceToPlayer);
-            System.out.println("Current position: " + position);
-            System.out.println("Target position: " + targetPlayerPos);
-        }
-
-        if (distanceToPlayer > 1.0f) {
-            moveTowardsPoint(targetPlayerPos, delta);
-            if (isDebug) System.out.println("Moving towards player");
-        }
-    }
-
     private void moveTowardsPoint(Vector3f target, float delta) {
         if (target == null) return;
 
@@ -162,33 +133,28 @@ public class Slime extends EnemyBase {
             stunDuration--;
             return;
         }
-        // Update animation
         updateAnimation();
+        float delta = 1.0f / 60.0f;
 
-        float delta = 1.0f / 60.0f; // Fixed delta time if not provided
-
-        // Update pathfinding
-        pathUpdateTimer += delta;
-        if (pathUpdateTimer >= pathUpdateInterval) {
-            updatePath();
-            pathUpdateTimer = 0;
+        if (targetPlayerPos == null) {
+            if (isDebug) System.out.println("No player position set");
+            return;
         }
 
-        // Update movement
-        if (!currentPath.isEmpty() && currentPathIndex < currentPath.size()) {
-            Vector3f targetPos = currentPath.get(currentPathIndex);
-            float dx = targetPos.x - position.x;
-            float dy = targetPos.y - position.y;
-            float distanceSquared = dx * dx + dy * dy;
+        // Simple distance check
+        float dx = targetPlayerPos.x - position.x;
+        float dy = targetPlayerPos.y - position.y;
+        float distanceToPlayer = (float) Math.sqrt(dx * dx + dy * dy);
 
-            if (distanceSquared < NODE_REACH_THRESHOLD) {
-                currentPathIndex++;
-            } else {
-                moveTowardsPoint(targetPos, delta);
-            }
-        } else {
-            // If no path is available, move directly towards the player
+        if (isDebug) {
+            System.out.println("Distance to player: " + distanceToPlayer);
+            System.out.println("Current position: " + position);
+            System.out.println("Target position: " + targetPlayerPos);
+        }
+
+        if (distanceToPlayer > 1.0f) {
             moveTowardsPoint(targetPlayerPos, delta);
+            if (isDebug) System.out.println("Moving towards player");
         }
     }
 

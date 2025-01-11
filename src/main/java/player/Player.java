@@ -107,9 +107,17 @@ public class Player {
         if (xp >= nextLevelXp) {
             xp = nextLevelXp - xp;
             nextLevelXp = nextLevelXp * (int) Math.pow(1.2, (currentLevel - 1));
-            currentLevel++;
+            levelUP();
         }
 //        System.out.println(xp);
+    }
+
+    private void levelUP(){
+        currentLevel++;
+        int factor = (int) Math.pow(1.2, (currentLevel - 1));
+        maxMp = maxMp * factor;
+        maxHp = maxHp * factor;
+        System.out.println(maxMp);
     }
 
     public void render() {
