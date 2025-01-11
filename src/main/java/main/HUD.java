@@ -5,38 +5,46 @@ import graphic.Texture;
 import graphic.VertexArray;
 import math.Matrix4f;
 import math.Vector3f;
+import player.AbilityManager;
 import player.Player;
 
+import java.util.List;
+
 public class HUD {
-    private VertexArray hpBar, mpBar, inventoryBar;
+    private VertexArray hpBar, mpBar, inventoryBar, abilityIcon;
 
     private Player player;
 
+    private AbilityManager abilityManager;
+
+
     private Texture inventoryTexture;
 
-    private float[] hpVertices, mpVertices, invVertices;
-
+    private float[] hpVertices, mpVertices, invVertices, iconVertices;
+    private List<Texture> abilityIcons;
     float invWidth = 316 * 0.75f;
     float invHeight = 84 * 0.75f;
-
+    float iconSize = 64 * 0.75f;
     float resourceBarHeight = 15f;
     float resourceBarWidth = 200f;
 
+    byte[] indices = new byte[]{
+            0, 1, 2,
+            2, 3, 0
+    };
+    float[] tcs = new float[]{
+            0, 1,
+            0, 0,
+            1, 0,
+            1, 1
+    };
 
-    public HUD(Player player) {
+
+    public HUD(Player player, AbilityManager abilityManager) {
         this.player = player;
+        this.abilityManager = abilityManager;
 
-        byte[] indices = new byte[]{
-                0, 1, 2,
-                2, 3, 0
-        };
-
-        float[] tcs = new float[]{
-                0, 1,
-                0, 0,
-                1, 0,
-                1, 1
-        };
+        abilityIcons = abilityManager.getAbilities();
 
         hpVertices = new float[]{
                 0.0f, 0.0f, 0.0f,
@@ -59,15 +67,24 @@ public class HUD {
                 invWidth, 0.0f, 0.0f
         };
 
+        iconVertices = new float[]{
+                0.0f, 0.0f, 0.0f,
+                0.0f, iconSize, 0.0f,
+                iconSize, iconSize, 0.0f,
+                iconSize, 0.0f, 0.0f
+        };
+
 
         hpBar = new VertexArray(hpVertices, indices, tcs);
         mpBar = new VertexArray(mpVertices, indices, tcs);
+
+        abilityIcon = new VertexArray(iconVertices, indices, tcs);
 
         inventoryBar = new VertexArray(invVertices, indices, tcs);
         inventoryTexture = new Texture("src/main/resources/inventory.png");
     }
 
-    public void render() {
+    private void drawHpBar() {
         Shader.HP.enable();
         float hpRatio = player.hp / player.maxHp;
 
@@ -79,7 +96,9 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight - 10f, 0.9f)));
         hpBar.render();
         Shader.HP.disable();
+    }
 
+    public void drawMpBar() {
         Shader.MP.enable();
         float mpRatio = (float) player.mp / player.maxMp;
         mpVertices[6] = mpVertices[9] = resourceBarWidth * mpRatio;
@@ -90,7 +109,37 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight * 2 - 20f, 0.9f)));
         mpBar.render();
         Shader.MP.disable();
+    }
 
+    public void drawIcon(List<Texture> abilityIcons) {
+        int offset = 0;
+        Shader.ICON.enable();
+
+        for (Texture icon : abilityIcons) {
+
+            Vector3f iconTranslate = new Vector3f(
+                    Camera.WIDTH - invWidth + 12 * 0.75f + offset - 15,
+                    -Camera.HEIGHT + invHeight - iconSize + 10 * 0.75f, 0.9f
+            );
+
+            offset += iconSize + 12 * 0.75;
+
+            Shader.ICON.setUniformMat4f("ml_matrix",
+                    Matrix4f.translate(iconTranslate));
+
+            icon.bind();
+
+            abilityIcon.render();
+
+        }
+        Shader.ICON.disable();
+
+
+    }
+
+    public void render() {
+        drawHpBar();
+        drawMpBar();
         Shader.INVENTORY.enable();
         Vector3f invTranslate = new Vector3f(
                 Camera.WIDTH - invWidth - 15,
@@ -102,6 +151,8 @@ public class HUD {
         inventoryBar.render();
 
         Shader.INVENTORY.disable();
+
+        drawIcon(abilityIcons);
     }
 
 }

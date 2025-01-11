@@ -35,6 +35,10 @@ public abstract class AbilityBase {
         return cost;
     }
 
+    public Texture getIcon() {
+        return icon;
+    }
+
     public void updateCost(int cost) {
         this.cost = cost;
     }

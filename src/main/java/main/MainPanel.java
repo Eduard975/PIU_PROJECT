@@ -4,17 +4,12 @@ package main;
 import entities.EnemyManager;
 import graphic.Shader;
 import graphic.SpriteSheet;
-import graphic.Texture;
-import math.Vector3f;
-import org.lwjgl.glfw.GLFWCursorPosCallback;
-import player.AbilityManager;
-import player.Player;
-import graphic.Shader;
 import graphic.Window;
 import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import player.AbilityManager;
 import player.Player;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -86,10 +81,9 @@ public class MainPanel implements Runnable {
         collisionManager = new CollisionManager();
         player = new Player();
         level = new Level(player);
-        hud = new HUD(player);
         enemyManager = new EnemyManager(player);
         abilityManager = new AbilityManager(player, enemyManager, collisionManager);
-
+        hud = new HUD(player, abilityManager);
 
 
         camera = new Camera(new Vector3f(0, 0, 0), player);
@@ -118,6 +112,9 @@ public class MainPanel implements Runnable {
 
         Shader.INVENTORY.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.INVENTORY.setUniform1i("tex", 1);
+
+        Shader.ICON.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.ICON.setUniform1i("tex", 1);
     }
 
 

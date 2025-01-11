@@ -1,9 +1,12 @@
 package player;
 
 import entities.EnemyManager;
+import graphic.Texture;
 import main.CollisionManager;
 import map.Level;
-import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -23,35 +26,35 @@ public class AbilityManager {
         this.enemyManager = enemyManager;
         this.collisionManager = collisionManager;
 
-         projectileAbility = new ProjectileAbility(5,2000,this.player);
-         resurrectAbility = new ResurrectAbility(10, 2000,this.player);
-         corpseExplosionAbility = new CorpseExplosionAbility(10, 2000,this.player);
+        projectileAbility = new ProjectileAbility(5, 2000, this.player);
+        resurrectAbility = new ResurrectAbility(10, 2000, this.player);
+        corpseExplosionAbility = new CorpseExplosionAbility(10, 2000, this.player);
     }
 
     public void update() {
         if (glfwGetKey(windowId, GLFW_KEY_S) == GLFW_PRESS) {
             player.position.y -= player.speed;
-            if(player.position.y < -Level.yBounds){
+            if (player.position.y < -Level.yBounds) {
                 player.position.y = -Level.yBounds;
             }
         }
         if (glfwGetKey(windowId, GLFW_KEY_W) == GLFW_PRESS) {
             player.position.y += player.speed;
-            if(player.position.y > Level.yBounds){
+            if (player.position.y > Level.yBounds) {
                 player.position.y = Level.yBounds;
             }
         }
 
         if (glfwGetKey(windowId, GLFW_KEY_A) == GLFW_PRESS) {
             player.position.x -= player.speed;
-            if(player.position.x < -Level.xBounds){
+            if (player.position.x < -Level.xBounds) {
                 player.position.x = -Level.xBounds;
             }
         }
 
         if (glfwGetKey(windowId, GLFW_KEY_D) == GLFW_PRESS) {
             player.position.x += player.speed;
-            if(player.position.x > Level.xBounds){
+            if (player.position.x > Level.xBounds) {
                 player.position.x = Level.xBounds;
             }
         }
@@ -65,7 +68,7 @@ public class AbilityManager {
 
         if (glfwGetKey(windowId, GLFW_KEY_F) == GLFW_PRESS) {
             if (resurrectAbility.canUse(player.mp)) {
-                if(collisionManager.checkDeadEnemyMouseCollision(player.getMousePosition(), enemyManager.deadEnemies)){
+                if (collisionManager.checkDeadEnemyMouseCollision(player.getMousePosition(), enemyManager.deadEnemies)) {
                     resurrectAbility.use(player.mp);
                     player.mp -= resurrectAbility.getCost();
                     enemyManager.deadEnemies.remove(ResurrectAbility.getEnemyToResurrect());
@@ -75,12 +78,22 @@ public class AbilityManager {
 
         if (glfwGetKey(windowId, GLFW_KEY_R) == GLFW_PRESS) {
             if (corpseExplosionAbility.canUse(player.mp)) {
-                if(collisionManager.checkDeadEnemyMouseCollision(player.getMousePosition(), enemyManager.deadEnemies)){
+                if (collisionManager.checkDeadEnemyMouseCollision(player.getMousePosition(), enemyManager.deadEnemies)) {
                     corpseExplosionAbility.use(player.mp);
                     player.mp -= corpseExplosionAbility.getCost();
                     enemyManager.deadEnemies.remove(CorpseExplosionAbility.getEnemyToExplode());
                 }
             }
         }
+    }
+
+
+    public List<Texture> getAbilities() {
+        List<Texture> abilitiesIcons = new ArrayList<>();
+        abilitiesIcons.add(projectileAbility.getIcon());
+        abilitiesIcons.add(resurrectAbility.getIcon());
+        abilitiesIcons.add(corpseExplosionAbility.getIcon());
+
+        return abilitiesIcons;
     }
 }
