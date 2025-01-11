@@ -1,8 +1,15 @@
 package player;
 
-import graphic.Shader;
+import entities.Ally;
+import entities.DeadEnemy;
+import entities.EnemyBase;
+import entities.EnemyManager;
 import graphic.Texture;
 import graphic.VertexArray;
+import graphic.Shader;
+import graphic.Window;
+import main.CollisionManager;
+import main.MouseInput;
 import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
@@ -20,12 +27,14 @@ public class Player {
     private float speed = SIZE / 2;
     
     public ArrayList<Projectile> projectiles = new ArrayList<>();
+    public ArrayList<Ally> allies = new ArrayList<>();
+    public Explosion explosion;
 
     private float angle;
     private Vector3f position = new Vector3f();
     private Vector3f projectileDirection;
+    private Vector3f mousePosition = new Vector3f();
 
-    private AbilityBase[] abilities;
 
     long windowId = GLFW.glfwGetCurrentContext();
 
@@ -38,14 +47,19 @@ public class Player {
     public long mpRegenCooldown = 4000;
     public long lastRegenTime = 0;
 
-    public void initAbilities() {
-        abilities = new AbilityBase[]{
-                new ProjectileAbility(5, 2000, this),
-        };
-    }
+    private EnemyManager enemyManager;
+    private CollisionManager collisionManager;
 
-    public Player() {
-        float[] vertices = new float[]{
+    private ProjectileAbility projectileAbility = new ProjectileAbility(5,2000,this);
+    private ResurrectAbility resurrectAbility = new ResurrectAbility(10, 2000,this);
+    private CorpseExplosionAbility corpseExplosionAbility = new CorpseExplosionAbility(10, 2000,this);
+
+
+    public Player(EnemyManager enemyManager, CollisionManager collisionManager){
+        this.enemyManager = enemyManager;
+        this.collisionManager = collisionManager;
+
+        float[] vertices = new float[] {
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,
                 -SIZE / 2.0f, SIZE / 2.0f, 0.2f,
                 SIZE / 2.0f, SIZE / 2.0f, 0.2f,
@@ -67,7 +81,6 @@ public class Player {
         mesh = new VertexArray(vertices, indices, tcs);
         texture = new Texture("src/main/resources/player.png");
 
-        initAbilities();
     }
 
     private boolean canRegenMp() {
@@ -83,7 +96,7 @@ public class Player {
         mp += 5;
     }
 
-    public void update() {
+    public void update( ){
         if (glfwGetKey(windowId, GLFW_KEY_S) == GLFW_PRESS) {
             position.y -= speed;
             if (position.y < -Level.yBounds) {
@@ -112,16 +125,50 @@ public class Player {
         }
 
         if (glfwGetKey(windowId, GLFW_KEY_E) == GLFW_PRESS) {
-            if (abilities[0].canUse(mp)) {
-                abilities[0].use(mp);
-                mp -= abilities[0].getCost();
+                if (projectileAbility.canUse(mp)) {
+                    projectileAbility.use(mp);
+                    mp -= projectileAbility.getCost();
+                }
+        }
+
+        if (glfwGetKey(windowId, GLFW_KEY_F) == GLFW_PRESS) {
+            if (resurrectAbility.canUse(mp)) {
+                if(collisionManager.checkDeadEnemyMouseCollision(mousePosition, enemyManager.deadEnemies)){
+                    resurrectAbility.use(mp);
+                    mp -= resurrectAbility.getCost();
+                    enemyManager.deadEnemies.remove(ResurrectAbility.getEnemyToResurrect());
+                }
+            }
+        }
+
+        if (glfwGetKey(windowId, GLFW_KEY_R) == GLFW_PRESS) {
+            if (corpseExplosionAbility.canUse(mp)) {
+                if(collisionManager.checkDeadEnemyMouseCollision(mousePosition, enemyManager.deadEnemies)){
+                    corpseExplosionAbility.use(mp);
+                    mp -= corpseExplosionAbility.getCost();
+                    enemyManager.deadEnemies.remove(CorpseExplosionAbility.getEnemyToExplode());
+                }
             }
         }
 
         for (Projectile projectile : projectiles) {
             projectile.update();
         }
+        ArrayList<Ally> alliesToRemove = new ArrayList<>();
 
+        for(Ally ally: allies){
+            ally.update();
+            if (ally.hp <= 0) {
+                alliesToRemove.add(ally);
+            }
+        }
+
+        for (Ally ally : alliesToRemove) {
+            allies.remove(ally);
+        }
+        if(explosion != null){
+            explosion.update();
+        }
         regenMP();
     }
 
@@ -132,6 +179,12 @@ public class Player {
         mesh.render();
         for (Projectile projectile : projectiles) {
             projectile.render();
+        }
+        for(Ally ally: allies){
+            ally.render();
+        }
+        if(explosion != null){
+            explosion.render();
         }
         Shader.PLAYER.disable();
     }
@@ -165,11 +218,20 @@ public class Player {
         this.angle = angle;
     }
 
-    public void setProjectileDirection(Vector3f projectileDirection) {
-        this.projectileDirection = new Vector3f(projectileDirection.x - position.x, projectileDirection.y - position.y, 0.0f);
+    public void setProjectileDirection() {
+        this.projectileDirection = new Vector3f(mousePosition.x - position.x, mousePosition.y - position.y, 0.0f);
     }
 
     public Vector3f getProjectileDirection() {
         return projectileDirection;
+    }
+
+    public void setMousePosition(Vector3f mousePosition) {
+        this.mousePosition = mousePosition;
+        setProjectileDirection();
+    }
+
+    public Vector3f getMousePosition() {
+        return mousePosition;
     }
 }

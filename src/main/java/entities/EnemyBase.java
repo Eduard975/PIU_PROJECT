@@ -21,7 +21,7 @@ public abstract class EnemyBase {
         position = pos;
     }
 
-    public int angle;
+    public float angle;
 
     public Vector3f position;
 
