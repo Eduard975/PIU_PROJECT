@@ -4,6 +4,12 @@ package main;
 import entities.EnemyManager;
 import graphic.Shader;
 import graphic.SpriteSheet;
+import graphic.Texture;
+import math.Vector3f;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
+import player.AbilityManager;
+import player.Player;
+import graphic.Shader;
 import graphic.Window;
 import map.Level;
 import math.Matrix4f;
@@ -44,6 +50,8 @@ public class MainPanel implements Runnable {
 
     private SpriteSheet spriteSheet;
 
+    private AbilityManager abilityManager;
+
 
     public void start() {
         init();
@@ -76,10 +84,12 @@ public class MainPanel implements Runnable {
         running = true;
 
         collisionManager = new CollisionManager();
-        player = new Player(enemyManager, collisionManager);
+        player = new Player();
         level = new Level(player);
         hud = new HUD(player);
         enemyManager = new EnemyManager(player);
+        abilityManager = new AbilityManager(player, enemyManager, collisionManager);
+
 
 
         camera = new Camera(new Vector3f(0, 0, 0), player);
@@ -162,7 +172,7 @@ public class MainPanel implements Runnable {
         collisionManager.checkProjectilesCollision(player.projectiles, enemyManager.enemies);
         enemyManager.update();
         camera.update();
-
+        abilityManager.update();
         collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
 
 

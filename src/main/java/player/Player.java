@@ -24,19 +24,22 @@ public class Player {
     private VertexArray mesh;
     private Texture texture;
 
-    private float speed = SIZE / 2;
-    
+    public float speed = SIZE/4;
+
+
     public ArrayList<Projectile> projectiles = new ArrayList<>();
     public ArrayList<Ally> allies = new ArrayList<>();
     public Explosion explosion;
 
     private float angle;
-    private Vector3f position = new Vector3f();
+    public Vector3f position = new Vector3f();
     private Vector3f projectileDirection;
     private Vector3f mousePosition = new Vector3f();
 
+    public int xp = 0;
+    public int nextLevelXp = 10;
+    public int currentLevel = 1;
 
-    long windowId = GLFW.glfwGetCurrentContext();
 
     public float hp = 100;
     public float maxHp = 100;
@@ -47,17 +50,7 @@ public class Player {
     public long mpRegenCooldown = 4000;
     public long lastRegenTime = 0;
 
-    private EnemyManager enemyManager;
-    private CollisionManager collisionManager;
-
-    private ProjectileAbility projectileAbility = new ProjectileAbility(5,2000,this);
-    private ResurrectAbility resurrectAbility = new ResurrectAbility(10, 2000,this);
-    private CorpseExplosionAbility corpseExplosionAbility = new CorpseExplosionAbility(10, 2000,this);
-
-
-    public Player(EnemyManager enemyManager, CollisionManager collisionManager){
-        this.enemyManager = enemyManager;
-        this.collisionManager = collisionManager;
+    public Player(){
 
         float[] vertices = new float[] {
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,
@@ -97,63 +90,12 @@ public class Player {
     }
 
     public void update( ){
-        if (glfwGetKey(windowId, GLFW_KEY_S) == GLFW_PRESS) {
-            position.y -= speed;
-            if (position.y < -Level.yBounds) {
-                position.y = -Level.yBounds;
-            }
-        }
-        if (glfwGetKey(windowId, GLFW_KEY_W) == GLFW_PRESS) {
-            position.y += speed;
-            if (position.y > Level.yBounds) {
-                position.y = Level.yBounds;
-            }
-        }
 
-        if (glfwGetKey(windowId, GLFW_KEY_A) == GLFW_PRESS) {
-            position.x -= speed;
-            if (position.x < -Level.xBounds) {
-                position.x = -Level.xBounds;
-            }
-        }
-
-        if (glfwGetKey(windowId, GLFW_KEY_D) == GLFW_PRESS) {
-            position.x += speed;
-            if (position.x > Level.xBounds) {
-                position.x = Level.xBounds;
-            }
-        }
-
-        if (glfwGetKey(windowId, GLFW_KEY_E) == GLFW_PRESS) {
-                if (projectileAbility.canUse(mp)) {
-                    projectileAbility.use(mp);
-                    mp -= projectileAbility.getCost();
-                }
-        }
-
-        if (glfwGetKey(windowId, GLFW_KEY_F) == GLFW_PRESS) {
-            if (resurrectAbility.canUse(mp)) {
-                if(collisionManager.checkDeadEnemyMouseCollision(mousePosition, enemyManager.deadEnemies)){
-                    resurrectAbility.use(mp);
-                    mp -= resurrectAbility.getCost();
-                    enemyManager.deadEnemies.remove(ResurrectAbility.getEnemyToResurrect());
-                }
-            }
-        }
-
-        if (glfwGetKey(windowId, GLFW_KEY_R) == GLFW_PRESS) {
-            if (corpseExplosionAbility.canUse(mp)) {
-                if(collisionManager.checkDeadEnemyMouseCollision(mousePosition, enemyManager.deadEnemies)){
-                    corpseExplosionAbility.use(mp);
-                    mp -= corpseExplosionAbility.getCost();
-                    enemyManager.deadEnemies.remove(CorpseExplosionAbility.getEnemyToExplode());
-                }
-            }
-        }
 
         for (Projectile projectile : projectiles) {
             projectile.update();
         }
+
         ArrayList<Ally> alliesToRemove = new ArrayList<>();
 
         for(Ally ally: allies){
@@ -166,10 +108,22 @@ public class Player {
         for (Ally ally : alliesToRemove) {
             allies.remove(ally);
         }
+
         if(explosion != null){
             explosion.update();
         }
+
+
+        checkXp();
         regenMP();
+    }
+
+    public void checkXp(){
+        if(xp >= nextLevelXp){
+            xp = nextLevelXp - xp;
+            nextLevelXp = nextLevelXp * (int)Math.pow(1.2, (currentLevel - 1));
+            currentLevel++;
+        }
     }
 
     public void render() {
