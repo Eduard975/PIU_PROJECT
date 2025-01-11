@@ -86,6 +86,8 @@ public class Ally extends EnemyBase {
     public void render() {
         Shader.SLIME.enable();
         Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(angle)));
+        Shader.SLIME.setUniform1i("isAlly", 1);
+
         texture.bind();
         mesh.render();
         Shader.SLIME.disable();

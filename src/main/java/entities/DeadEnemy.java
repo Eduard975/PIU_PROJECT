@@ -107,6 +107,7 @@ public class DeadEnemy {
         Shader.SLIME.enable();
 
         Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.scale(scaleX, scaleY, 1.0f)));
+        Shader.SLIME.setUniform1i("isAlly", 0);
 
         texture.bind();
         mesh.render();
