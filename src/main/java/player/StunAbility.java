@@ -1,13 +1,12 @@
 package player;
 
-import entities.DeadEnemy;
 import entities.EnemyBase;
 import graphic.Texture;
 
-public class StunAbility extends AbilityBase{
+public class StunAbility extends AbilityBase {
     public StunAbility(int cost, int cooldown, Player player) {
         super(cost, cooldown, player);
-        this.icon = new Texture("src/main/resources/stun.png");
+        this.icon = new Texture("src/main/resources/images/stun.png");
     }
 
     public static EnemyBase enemyToStun;

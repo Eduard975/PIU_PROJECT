@@ -49,7 +49,7 @@ public class Ally extends EnemyBase {
         offsetY = (defaultSpriteHeight - spriteHeight) / 2;
 
         spriteSheet = new SpriteSheet(
-                new Texture("src/main/resources/slime.png"),
+                new Texture("src/main/resources/images/slime.png"),
                 defaultSpriteWidth, defaultSpriteHeight, 0
         );
 

@@ -68,7 +68,7 @@ public class Slime extends EnemyBase {
         offsetY = (DEFAULT_SPRITE_HEIGHT - spriteHeight) / 2;
 
         spriteSheet = new SpriteSheet(
-                new Texture("src/main/resources/slime.png"),
+                new Texture("src/main/resources/images/slime.png"),
                 DEFAULT_SPRITE_WIDTH, DEFAULT_SPRITE_HEIGHT, 0
         );
 
@@ -128,7 +128,7 @@ public class Slime extends EnemyBase {
 
     @Override
     public void update() {
-        if(stunDuration > 0){
+        if (stunDuration > 0) {
             stunDuration--;
             return;
         }

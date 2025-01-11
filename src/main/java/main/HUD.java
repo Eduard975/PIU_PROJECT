@@ -91,7 +91,7 @@ public class HUD {
         xpBar = new VertexArray(xpVertices, indices, tcs);
 
         skillBar = new VertexArray(sbVertices, indices, tcs);
-        inventoryTexture = new Texture("src/main/resources/inventory.png");
+        inventoryTexture = new Texture("src/main/resources/images/inventory.png");
     }
 
     private void drawHpBar() {

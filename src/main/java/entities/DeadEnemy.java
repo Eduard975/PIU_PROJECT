@@ -52,7 +52,7 @@ public class DeadEnemy {
 
         // Load the sprite sheet with the death animation frames
         spriteSheet = new SpriteSheet(
-                new Texture("src/main/resources/slime_death.png"),
+                new Texture("src/main/resources/images/slime_death.png"),
                 64, 64, 0 // Automatically calculate number of sprites
         );
 

@@ -6,7 +6,6 @@ import graphic.VertexArray;
 import graphic.Window;
 import math.Matrix4f;
 import math.Vector3f;
-import player.Player;
 
 public class Level {
 
@@ -42,7 +41,7 @@ public class Level {
         };
 
         background = new VertexArray(vertices, indices, textures);
-        backgroundTexture = new Texture("src/main/resources/bg.jpeg");
+        backgroundTexture = new Texture("src/main/resources/images/bg.jpeg");
     }
 
     public void update() {

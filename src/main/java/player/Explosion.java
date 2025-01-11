@@ -3,7 +3,6 @@ package player;
 import graphic.Shader;
 import graphic.Texture;
 import graphic.VertexArray;
-import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
 
@@ -24,19 +23,19 @@ public class Explosion {
         this.radius = radius;
 
 
-        float[] vertices = new float[] {
+        float[] vertices = new float[]{
                 -radius, -radius, 0.5f,
-                -radius,  radius, 0.5f,
-                radius,  radius, 0.5f,
+                -radius, radius, 0.5f,
+                radius, radius, 0.5f,
                 radius, -radius, 0.5f
         };
 
-        byte[] indices = new byte[] {
+        byte[] indices = new byte[]{
                 0, 1, 2,
                 2, 3, 0
         };
 
-        float[] tcs = new float[] {
+        float[] tcs = new float[]{
                 0, 1,
                 0, 0,
                 1, 0,
@@ -44,15 +43,15 @@ public class Explosion {
         };
 
         mesh = new VertexArray(vertices, indices, tcs);
-        texture = new Texture("src/main/resources/projectile.png");
+        texture = new Texture("src/main/resources/images/projectile.png");
     }
 
-    public void update(){
+    public void update() {
 
     }
 
     public void render() {
-        if(explosionFrames > 0){
+        if (explosionFrames > 0) {
             Shader.PROJECTILE.enable();
             Shader.PROJECTILE.setUniformMat4f("ml_matrix", Matrix4f.translate(position));
             texture.bind();

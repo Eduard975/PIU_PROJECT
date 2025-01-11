@@ -6,7 +6,7 @@ import graphic.Texture;
 public class CorpseExplosionAbility extends AbilityBase {
     public CorpseExplosionAbility(int cost, int cooldown, Player player) {
         super(cost, cooldown, player);
-        this.icon = new Texture("src/main/resources/corpseExplosionSkill.png");
+        this.icon = new Texture("src/main/resources/images/corpseExplosionSkill.png");
     }
 
     public static DeadEnemy enemyToExplode;
