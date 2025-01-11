@@ -163,13 +163,13 @@ public class MainPanel implements Runnable {
 
 
     private void update() {
+        abilityManager.update();
         window.update();
         player.update();
         level.update();
         collisionManager.checkProjectilesCollision(player.projectiles, enemyManager.enemies);
         enemyManager.update();
         camera.update();
-        abilityManager.update();
         collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
 
 

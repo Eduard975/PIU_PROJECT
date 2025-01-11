@@ -8,7 +8,6 @@ import math.Matrix4f;
 import math.Vector3f;
 
 public class Explosion {
-    private float SIZE = Level.TILE_SIZE/8.0f;
     private VertexArray mesh;
     private Texture texture;
 
@@ -24,13 +23,12 @@ public class Explosion {
         this.position = new Vector3f(position.x, position.y, position.z);
         this.radius = radius;
 
-        SIZE = SIZE + radius;
 
         float[] vertices = new float[] {
-                -SIZE / 2.0f, -SIZE / 2.0f, 0.5f,
-                -SIZE / 2.0f,  SIZE / 2.0f, 0.5f,
-                SIZE / 2.0f,  SIZE / 2.0f, 0.5f,
-                SIZE / 2.0f, -SIZE / 2.0f, 0.5f
+                -radius, -radius, 0.5f,
+                -radius,  radius, 0.5f,
+                radius,  radius, 0.5f,
+                radius, -radius, 0.5f
         };
 
         byte[] indices = new byte[] {
@@ -55,7 +53,6 @@ public class Explosion {
 
     public void render() {
         if(explosionFrames > 0){
-
             Shader.PROJECTILE.enable();
             Shader.PROJECTILE.setUniformMat4f("ml_matrix", Matrix4f.translate(position));
             texture.bind();
