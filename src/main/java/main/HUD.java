@@ -11,7 +11,7 @@ import player.Player;
 import java.util.List;
 
 public class HUD {
-    private VertexArray hpBar, mpBar, inventoryBar, abilityIcon;
+    private VertexArray hpBar, mpBar, inventoryBar, abilityIcon, xpBar;
 
     private Player player;
 
@@ -20,7 +20,7 @@ public class HUD {
 
     private Texture inventoryTexture;
 
-    private float[] hpVertices, mpVertices, invVertices, iconVertices;
+    private float[] hpVertices, mpVertices, xpVertices, invVertices, iconVertices;
     private List<Texture> abilityIcons;
     float invWidth = 316 * 0.75f;
     float invHeight = 84 * 0.75f;
@@ -60,6 +60,13 @@ public class HUD {
                 resourceBarWidth, 0.0f, 0.0f
         };
 
+        xpVertices = new float[]{
+                0.0f, 0.0f, 0.0f,
+                0.0f, resourceBarHeight, 0.0f,
+                resourceBarWidth, resourceBarHeight, 0.0f,
+                resourceBarWidth, 0.0f, 0.0f
+        };
+
         invVertices = new float[]{
                 0.0f, 0.0f, 0.0f,
                 0.0f, invHeight, 0.0f,
@@ -79,6 +86,7 @@ public class HUD {
         mpBar = new VertexArray(mpVertices, indices, tcs);
 
         abilityIcon = new VertexArray(iconVertices, indices, tcs);
+        xpBar = new VertexArray(xpVertices, indices, tcs);
 
         inventoryBar = new VertexArray(invVertices, indices, tcs);
         inventoryTexture = new Texture("src/main/resources/inventory.png");
@@ -109,6 +117,19 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight * 2 - 20f, 0.9f)));
         mpBar.render();
         Shader.MP.disable();
+
+        Shader.XP.enable();
+        float xpRatio = (float) player.xp / player.nextLevelXp;
+        xpVertices[6] = xpVertices[9] = resourceBarWidth * xpRatio;
+        xpBar.updateVertices(xpVertices);
+
+        Shader.XP.setUniformMat4f("ml_matrix",
+                Matrix4f.translate(new Vector3f(-Camera.WIDTH + 15,
+                        Camera.HEIGHT - resourceBarHeight * 4 - 15f, 0.9f)));
+        xpBar.render();
+        Shader.XP.disable();
+
+
     }
 
     public void drawIcon(List<Texture> abilityIcons) {
