@@ -105,6 +105,11 @@ public class Slime extends EnemyBase {
 
     @Override
     public void update() {
+        if (stunDuration > 0) {
+            stunDuration--;
+            return;
+        }
+
         updateAnimation();
         float delta = 1.0f / 60.0f;
 
@@ -156,41 +161,6 @@ public class Slime extends EnemyBase {
         }
     }
 
-    @Override
-    public void update() {
-        if (stunDuration > 0) {
-            stunDuration--;
-            return;
-        }
-        // Update animation
-        updateAnimation();
-
-        float delta = 1.0f / 60.0f; // Fixed delta time if not provided
-
-        // Update pathfinding
-        pathUpdateTimer += delta;
-        if (pathUpdateTimer >= pathUpdateInterval) {
-            updatePath();
-            pathUpdateTimer = 0;
-        }
-
-        // Update movement
-        if (!currentPath.isEmpty() && currentPathIndex < currentPath.size()) {
-            Vector3f targetPos = currentPath.get(currentPathIndex);
-            float dx = targetPos.x - position.x;
-            float dy = targetPos.y - position.y;
-            float distanceSquared = dx * dx + dy * dy;
-
-            if (distanceSquared < NODE_REACH_THRESHOLD) {
-                currentPathIndex++;
-            } else {
-                moveTowardsPoint(targetPos, delta);
-            }
-        } else {
-            // If no path is available, move directly towards the player
-            moveTowardsPoint(targetPlayerPos, delta);
-        }
-    }
 
     public void updatePlayerPos(Vector3f playerPos) {
         if (playerPos == null) {

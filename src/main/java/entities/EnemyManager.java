@@ -5,6 +5,7 @@ import math.Vector3f;
 import player.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class EnemyManager {
@@ -17,6 +18,7 @@ public class EnemyManager {
 
     private Player player;
 
+
     public EnemyManager(Player player) {
         enemies = new ArrayList<>();
         deadEnemies = new ArrayList<>();
@@ -25,8 +27,8 @@ public class EnemyManager {
 
     public void addEnemy(Vector3f pos) {
         enemies.add(new Slime(pos));
-
     }
+
 
     public void removeEnemy(EnemyBase e) {
         enemies.remove(e);
@@ -63,6 +65,7 @@ public class EnemyManager {
         spawnRandomEnemy();
 
         ArrayList<EnemyBase> enemiesToRemove = new ArrayList<>();
+        ArrayList<Ally> alliesToRemove = new ArrayList<>();
 
         for (EnemyBase e : enemies) {
             if (e instanceof Slime) {
@@ -75,9 +78,11 @@ public class EnemyManager {
                 player.xp += e.xpWorth;
             }
         }
+        player.setEnemies(enemies);
 
         for (EnemyBase enemy : enemiesToRemove) {
             removeEnemy(enemy);
         }
+
     }
 }
