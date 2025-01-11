@@ -44,10 +44,12 @@ public class Slime extends EnemyBase {
 
     public Slime(Vector3f pos, int mySpriteWidth, int mySpriteHeight, float enemyScale) {
         super(pos);
-        attackDamage = (int) (15 * enemyScale);
+        attackDamage = (int) (1.75 * enemyScale);
+        hp = (int) (2.4 * enemyScale);
+        initialHp = hp;
         attackCooldown = 2000;
 //        TODO SCALE
-        xpWorth = baseXp;
+        xpWorth = (int) (baseXp * (enemyScale * 0.75));
 
         float[] vertices = new float[]{
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,

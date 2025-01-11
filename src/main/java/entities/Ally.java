@@ -34,9 +34,15 @@ public class Ally extends EnemyBase {
         this(pos, 25, 25);
     }
 
+    public Ally(Vector3f pos, int hp, int attack, float scalingFactor) {
+        this(pos, 25, 25);
+        this.hp = hp + (int)(scalingFactor * 2.25);
+        this.attackDamage = attack + (int)(scalingFactor * 1.75);
+
+    }
+
     public Ally(Vector3f pos, int mySpriteWidth, int mySpriteHeight) {
         super(pos);
-        attackDamage = 15;
         attackCooldown = 2000;
 
         float[] vertices = new float[]{

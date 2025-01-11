@@ -30,16 +30,19 @@ public class Player {
     private Vector3f mousePosition = new Vector3f();
 
     public int xp = 0;
-    public int nextLevelXp = 10;
+    public int nextLevelXp = 2;
     public int currentLevel = 1;
     public float score;
 
-    public float hp = 100;
-    public float maxHp = 100;
+    public float baseDamage = 1.0f;
+    public float hp = 10;
+    public float maxHp = 10;
     public int mp = 25;
     public int maxMp = 25;
-    public long mpRegenCooldown = 4000;
+    public long mpRegenCooldown = 2500;
+    public long hpRegenCooldown = 4000;
     public long lastRegenTime = 0;
+    public long lastHpRegenTime = 0;
     private List<EnemyBase> enemies;
 
     public Player() {
@@ -74,9 +77,20 @@ public class Player {
         if (!canRegenMp()) {
             return;
         }
-        System.out.println(mp);
         lastRegenTime = System.currentTimeMillis();
-        mp += 5;
+        mp += (int) (baseDamage * 3);
+    }
+
+    private boolean canRegenHp() {
+        return (hp < maxHp) && (System.currentTimeMillis() - lastHpRegenTime) >= hpRegenCooldown;
+    }
+
+    private void regenHP() {
+        if (!canRegenHp()) {
+            return;
+        }
+        lastHpRegenTime = System.currentTimeMillis();
+        hp += (int) baseDamage;
     }
 
     public void setEnemies(List<EnemyBase> enemies) {
@@ -111,6 +125,7 @@ public class Player {
 
         checkXp();
         regenMP();
+        regenHP();
     }
 
     public void checkXp() {
@@ -125,11 +140,11 @@ public class Player {
 
     private void levelUP() {
         currentLevel++;
-        int factor = (int) Math.pow(2.2, (currentLevel - 1));
+        int factor = (int) Math.pow(1.35, (currentLevel - 1));
         System.out.println(factor);
         factor = Math.max(factor, 1);
         maxMp = maxMp + factor;
-        maxHp = maxHp + factor;
+        maxHp = (int)(maxHp + (factor * 0.7));
     }
 
     public void render() {
@@ -193,5 +208,9 @@ public class Player {
 
     public Vector3f getMousePosition() {
         return mousePosition;
+    }
+
+    public float getBaseDamage(){
+        return baseDamage;
     }
 }

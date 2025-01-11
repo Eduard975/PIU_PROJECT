@@ -17,12 +17,15 @@ public class Projectile {
     private Vector3f direction;
     private float speed = 10;
 
-    public float damage = 100;
+    public float damage;
+    public float scalingFactor = 0.5f;
 
-    public Projectile(Vector3f playerPosition, float playerAngle, Vector3f projectileDirection) {
+    public Projectile(Vector3f playerPosition, float playerAngle, Vector3f projectileDirection, float baseDamage) {
         angle = playerAngle;
         position = new Vector3f(playerPosition.x, playerPosition.y, playerPosition.z);
         direction = new Vector3f(projectileDirection.x, projectileDirection.y, projectileDirection.z).normalize();
+
+        damage = baseDamage + (baseDamage * scalingFactor);
 
         float[] vertices = new float[]{
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.5f,

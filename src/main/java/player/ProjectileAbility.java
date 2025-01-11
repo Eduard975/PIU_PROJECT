@@ -10,6 +10,6 @@ public class ProjectileAbility extends AbilityBase {
 
     @Override
     public void useEffect() {
-        player.projectiles.add(new Projectile(player.getPosition(), player.getAngle(), player.getProjectileDirection()));
+        player.projectiles.add(new Projectile(player.getPosition(), player.getAngle(), player.getProjectileDirection(), player.getBaseDamage()));
     }
 }

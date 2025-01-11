@@ -110,6 +110,8 @@ public class CollisionManager {
                         allyMax.y > enemyMin.y && allyMax.y < enemyMax.y) {
                     if(enemy.canAttack()){
                         ally.hp -= enemy.attackDamage;
+                        System.out.println("ally hit for " + enemy.attackDamage + " has " + ally.hp);
+
                     }
 
                     if(ally.canAttack()){

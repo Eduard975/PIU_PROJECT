@@ -17,13 +17,15 @@ public class Explosion {
     public float damage = 100;
 
     public int explosionFrames = 30;
+    public float damageScaling = 3.0f;
 
     public float scaleAnimation = 0.01f;
 
-    public Explosion(Vector3f position, float radius) {
+    public Explosion(Vector3f position, float radius, float baseDamage) {
         this.position = new Vector3f(position.x, position.y, position.z);
         this.radius = radius;
 
+        damage = baseDamage + (baseDamage * damageScaling);
 
         float[] vertices = new float[]{
                 -radius, -radius, 0.5f,

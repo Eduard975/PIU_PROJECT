@@ -30,7 +30,7 @@ public class AbilityManager {
         this.soundPlayer = soundPlayer;
 
         projectileAbility = new ProjectileAbility(5, 2000, this.player);
-        resurrectAbility = new ResurrectAbility(10, 2000, this.player);
+        resurrectAbility = new ResurrectAbility(7, 2000, this.player);
         corpseExplosionAbility = new CorpseExplosionAbility(10, 2000, this.player);
         stunAbility = new StunAbility(10, 2000, this.player);
     }

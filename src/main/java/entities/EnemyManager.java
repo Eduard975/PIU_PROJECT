@@ -12,13 +12,14 @@ public class EnemyManager {
     public ArrayList<EnemyBase> enemies;
     public ArrayList<DeadEnemy> deadEnemies;
 
-    private int spawnCooldown = 5000;
+    private int spawnCooldown = 3000;
+    private long gameStartTime = System.currentTimeMillis();
+    private float scalingFactor = 100.0f;
 
     private long lastSpawnTime = 0;
 
     public float enemyScale = 1.0f;
     private Player player;
-
 
     public EnemyManager(Player player) {
         enemies = new ArrayList<>();
@@ -30,10 +31,9 @@ public class EnemyManager {
         enemies.add(new Slime(pos, enemyScale));
     }
 
-
     public void removeEnemy(EnemyBase e) {
         enemies.remove(e);
-        deadEnemies.add(new DeadEnemy(e.position));
+        deadEnemies.add(new DeadEnemy(e.position, (int)e.initialHp, e.attackDamage));
     }
 
     public void render() {
@@ -58,15 +58,21 @@ public class EnemyManager {
             float enemyY = -Level.yBounds + (rand.nextFloat() * Level.yBounds);
             addEnemy(new Vector3f(enemyX, enemyY, 0.2f));
             lastSpawnTime = currentTime;
-            System.out.println("Spawning enemies");
         }
     }
 
+
+
+    public void updateScale() {
+        long currentTime = System.currentTimeMillis();
+        float elapsedTimeInSeconds = (currentTime - gameStartTime) / 1000.0f;
+
+        enemyScale = 1.0f + (float) Math.pow(elapsedTimeInSeconds / scalingFactor, 1.4);
+    }
     public void update() {
         spawnRandomEnemy();
 
         ArrayList<EnemyBase> enemiesToRemove = new ArrayList<>();
-        ArrayList<Ally> alliesToRemove = new ArrayList<>();
 
         for (EnemyBase e : enemies) {
             if (e instanceof Slime) {
@@ -86,5 +92,6 @@ public class EnemyManager {
             removeEnemy(enemy);
         }
 
+        updateScale();
     }
 }

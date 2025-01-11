@@ -14,7 +14,7 @@ public class CorpseExplosionAbility extends AbilityBase {
 
     @Override
     public void useEffect() {
-        player.explosion = new Explosion(player.getMousePosition(), radius);
+        player.explosion = new Explosion(player.getMousePosition(), radius, player.getBaseDamage());
     }
 
     public static void setEnemyToExplode(DeadEnemy deadEnemy) {

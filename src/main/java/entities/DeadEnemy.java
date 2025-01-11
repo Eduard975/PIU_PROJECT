@@ -25,9 +25,17 @@ public class DeadEnemy {
     private long frameDuration = 100; // 100ms per frame
     private long lastFrameTime;
     private boolean animationComplete = false;
+    public int hp;
+    public int attack;
 
     float scaleX = 1f;  // Scale 50% of the original width
     float scaleY = 1f;  // Scale 50% of the original height
+
+    public DeadEnemy(Vector3f position, int hp, int attack){
+        this(position);
+        this.hp = hp;
+        this.attack = attack;
+    }
 
     public DeadEnemy(Vector3f enemyPosition) {
         position = new Vector3f(enemyPosition.x, enemyPosition.y, enemyPosition.z);

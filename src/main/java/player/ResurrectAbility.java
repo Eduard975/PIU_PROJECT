@@ -14,7 +14,8 @@ public class ResurrectAbility extends AbilityBase {
 
     @Override
     public void useEffect() {
-        player.allies.add(new Ally(enemyToResurrect.position));
+        System.out.println(enemyToResurrect.hp);
+        player.allies.add(new Ally(enemyToResurrect.position, enemyToResurrect.hp, enemyToResurrect.attack, (float)(player.baseDamage * 0.6)));
     }
 
     public static void setEnemyToResurrect(DeadEnemy deadEnemy) {
