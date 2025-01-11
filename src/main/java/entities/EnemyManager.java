@@ -15,6 +15,7 @@ public class EnemyManager {
 
     private long lastSpawnTime = 0;
 
+    public float enemyScale = 1.0f;
     private Player player;
 
     public EnemyManager(Player player) {
@@ -24,8 +25,7 @@ public class EnemyManager {
     }
 
     public void addEnemy(Vector3f pos) {
-        enemies.add(new Slime(pos));
-
+        enemies.add(new Slime(pos, enemyScale));
     }
 
     public void removeEnemy(EnemyBase e) {
@@ -73,6 +73,7 @@ public class EnemyManager {
             if (e.hp <= 0) {
                 enemiesToRemove.add(e);
                 player.xp += e.xpWorth;
+                player.score += 10 * enemyScale;
             }
         }
 

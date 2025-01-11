@@ -76,7 +76,6 @@ public class MainPanel implements Runnable {
             throw new IllegalStateException("Unable to initialize GLFW!");
         }
 
-
         window = new Window("NecroLord");
         running = true;
 
@@ -89,6 +88,7 @@ public class MainPanel implements Runnable {
         abilityManager = new AbilityManager(player, enemyManager, collisionManager, soundPlayer);
         hud = new HUD(player, abilityManager);
 
+        soundPlayer.setAllSoundToVolume(0.4f);
 
         camera = new Camera(new Vector3f(0, 0, 0), player);
 
@@ -125,13 +125,13 @@ public class MainPanel implements Runnable {
 
     @Override
     public void run() {
-
         long initialTime = System.nanoTime();
         final double timeU = 1000000000 / TARGET_UPS;
         final double timeF = 1000000000 / TARGET_FPS;
         double deltaU = 0, deltaF = 0;
         int frames = 0, ticks = 0;
         long timer = System.currentTimeMillis();
+        boolean isPaused = false;
 
         while (running) {
             if (window.isClosing()) {
@@ -142,6 +142,14 @@ public class MainPanel implements Runnable {
             deltaU += (currentTime - initialTime) / timeU;
             deltaF += (currentTime - initialTime) / timeF;
             initialTime = currentTime;
+
+            if (isPaused) {
+                soundPlayer.BACKGROUND_MUSIC.pause();
+            }
+
+            if (soundPlayer.BACKGROUND_MUSIC.hasFinished) {
+                soundPlayer.BACKGROUND_MUSIC.play();
+            }
 
             if (deltaU >= 1) {
                 update();
@@ -159,6 +167,7 @@ public class MainPanel implements Runnable {
                 if (RENDER_TIME) {
 //                    System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
                 }
+                enemyManager.enemyScale += 0.015;
                 frames = 0;
                 ticks = 0;
                 timer += 1000;

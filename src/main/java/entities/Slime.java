@@ -38,13 +38,13 @@ public class Slime extends EnemyBase {
         pathFinder = new PathFinder(1280f, 720f, 16f);
     }
 
-    public Slime(Vector3f pos) {
-        this(pos, 25, 25);
+    public Slime(Vector3f pos, float enemyScale) {
+        this(pos, 25, 25, enemyScale);
     }
 
-    public Slime(Vector3f pos, int mySpriteWidth, int mySpriteHeight) {
+    public Slime(Vector3f pos, int mySpriteWidth, int mySpriteHeight, float enemyScale) {
         super(pos);
-        attackDamage = 15;
+        attackDamage = (int) (15 * enemyScale);
         attackCooldown = 4000;
 //        TODO SCALE
         xpWorth = baseXp;
@@ -181,8 +181,8 @@ public class Slime extends EnemyBase {
         // Only update path if we have a valid player position
         if (targetPlayerPos != null) {
             // Clamp target position to window bounds
-            float clampedX = Math.max(SIZE/2, Math.min(targetPlayerPos.x, Window.WIDTH - SIZE/2));
-            float clampedY = Math.max(SIZE/2, Math.min(targetPlayerPos.y, Window.HEIGHT - SIZE/2));
+            float clampedX = Math.max(SIZE / 2, Math.min(targetPlayerPos.x, Window.WIDTH - SIZE / 2));
+            float clampedY = Math.max(SIZE / 2, Math.min(targetPlayerPos.y, Window.HEIGHT - SIZE / 2));
             Vector3f clampedTarget = new Vector3f(clampedX, clampedY, targetPlayerPos.z);
 
             List<Vector3f> newPath = pathFinder.findPath(position, clampedTarget);
@@ -196,6 +196,7 @@ public class Slime extends EnemyBase {
             }
         }
     }
+
     @Override
     public void render() {
         Shader.SLIME.enable();

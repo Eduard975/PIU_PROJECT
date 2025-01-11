@@ -2,11 +2,14 @@ package sound;
 
 public class SoundPlayer {
     public final Sound SHOOT;
-    public final Sound PLAYER_DEATH;
+    public final Sound GAME_OVER;
+    public final Sound BACKGROUND_MUSIC;
 
     public SoundPlayer() {
         SHOOT = new Sound("src/main/resources/sounds/fireball.wav");
-        PLAYER_DEATH = new Sound("src/main/resources/sounds/game_over.wav");
+        GAME_OVER = new Sound("src/main/resources/sounds/game_over.wav");
+        BACKGROUND_MUSIC = new Sound("src/main/resources/sounds/background.wav");
+
     }
 
     public void setAllSoundToVolume(float volume) {
@@ -14,6 +17,8 @@ public class SoundPlayer {
             throw new Error("Volume vale should be between 0 and 1");
         }
 
-        SHOOT.setVolume(volume);
+        SHOOT.setVolume(volume, false);
+        GAME_OVER.setVolume(volume, false);
+        BACKGROUND_MUSIC.setVolume(volume, true);
     }
 }

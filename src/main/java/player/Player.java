@@ -30,7 +30,7 @@ public class Player {
     public int xp = 0;
     public int nextLevelXp = 10;
     public int currentLevel = 1;
-
+    public float score;
 
     public float hp = 100;
     public float maxHp = 100;
@@ -112,7 +112,7 @@ public class Player {
 //        System.out.println(xp);
     }
 
-    private void levelUP(){
+    private void levelUP() {
         currentLevel++;
         int factor = (int) Math.pow(1.2, (currentLevel - 1));
         maxMp = maxMp * factor;

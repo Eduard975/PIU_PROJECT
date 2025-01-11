@@ -33,7 +33,7 @@ public class CollisionManager {
     public void checkPlayerEnemyCollision(Player player, ArrayList<EnemyBase> enemies) {
         Vector3f playerMin = player.getMinBounds();
         Vector3f playerMax = player.getMaxBounds();
-
+        
         for (EnemyBase enemy : enemies) {
             Vector3f enemyMin = enemy.getMinBounds();
             Vector3f enemyMax = enemy.getMaxBounds();
@@ -42,8 +42,10 @@ public class CollisionManager {
                     playerMax.y > enemyMin.y && playerMin.y < enemyMax.y && enemy.stunDuration <= 0) {
                 if (player.hp <= 0) {
                     player.hp = 0;
-                } else
+                } else {
                     player.hp -= enemy.attackDamage;
+                    // System.out.println("Player HP" + player.hp + "\nEnemy Damage " + enemy.attackDamage);
+                }
             }
         }
     }
@@ -85,7 +87,7 @@ public class CollisionManager {
         return false;
     }
 
-    public void checkAOEHit(Explosion explosion, ArrayList<EnemyBase> enemies){
+    public void checkAOEHit(Explosion explosion, ArrayList<EnemyBase> enemies) {
         for (EnemyBase enemy : enemies) {
             float dx = enemy.position.x - explosion.position.x;
             float dy = enemy.position.y - explosion.position.y;
