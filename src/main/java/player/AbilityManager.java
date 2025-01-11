@@ -84,6 +84,7 @@ public class AbilityManager {
         if (glfwGetKey(windowId, GLFW_KEY_R) == GLFW_PRESS) {
             if (corpseExplosionAbility.canUse(player.mp)) {
                 if (collisionManager.checkDeadEnemyMouseCollision(player.getMousePosition(), enemyManager.deadEnemies)) {
+                    soundPlayer.EXPLOSION.play();
                     corpseExplosionAbility.use(player.mp);
                     player.mp -= corpseExplosionAbility.getCost();
                     enemyManager.deadEnemies.remove(CorpseExplosionAbility.getEnemyToExplode());
