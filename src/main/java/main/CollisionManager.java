@@ -39,7 +39,7 @@ public class CollisionManager {
             Vector3f enemyMax = enemy.getMaxBounds();
 
             if (playerMin.x > enemyMin.x && playerMin.x < enemyMax.x &&
-                    playerMax.y > enemyMin.y && playerMin.y < enemyMax.y) {
+                    playerMax.y > enemyMin.y && playerMin.y < enemyMax.y && enemy.stunDuration <= 0) {
                 if (player.hp <= 0) {
                     player.hp = 0;
                 } else
@@ -61,6 +61,24 @@ public class CollisionManager {
                     mouseMaxY > enemyMin.y && mouseMinY < enemyMax.y) {
                 ResurrectAbility.setEnemyToResurrect(enemy);
                 CorpseExplosionAbility.setEnemyToExplode(enemy);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkEnemyMouseCollision(Vector3f MousePosition, ArrayList<EnemyBase> enemies) {
+        float mouseMinX = MousePosition.x - 5;
+        float mouseMaxX = MousePosition.x + 5;
+        float mouseMinY = MousePosition.y - 5;
+        float mouseMaxY = MousePosition.y + 5;
+
+        for (EnemyBase enemy : enemies) {
+            Vector3f enemyMin = enemy.getMinBounds();
+            Vector3f enemyMax = enemy.getMaxBounds();
+            if (mouseMinX > enemyMin.x && mouseMinX < enemyMax.x &&
+                    mouseMaxY > enemyMin.y && mouseMinY < enemyMax.y) {
+                StunAbility.setEnemyToStun(enemy);
                 return true;
             }
         }

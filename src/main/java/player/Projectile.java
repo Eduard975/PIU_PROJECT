@@ -8,7 +8,7 @@ import math.Matrix4f;
 import math.Vector3f;
 
 public class Projectile {
-    private float SIZE = Level.TILE_SIZE/8.0f;
+    private float SIZE = Level.TILE_SIZE / 8.0f;
     private VertexArray mesh;
     private Texture texture;
 
@@ -24,19 +24,19 @@ public class Projectile {
         position = new Vector3f(playerPosition.x, playerPosition.y, playerPosition.z);
         direction = new Vector3f(projectileDirection.x, projectileDirection.y, projectileDirection.z).normalize();
 
-        float[] vertices = new float[] {
+        float[] vertices = new float[]{
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.5f,
-                -SIZE / 2.0f,  SIZE / 2.0f, 0.5f,
-                 SIZE / 2.0f,  SIZE / 2.0f, 0.5f,
-                 SIZE / 2.0f, -SIZE / 2.0f, 0.5f
+                -SIZE / 2.0f, SIZE / 2.0f, 0.5f,
+                SIZE / 2.0f, SIZE / 2.0f, 0.5f,
+                SIZE / 2.0f, -SIZE / 2.0f, 0.5f
         };
 
-        byte[] indices = new byte[] {
+        byte[] indices = new byte[]{
                 0, 1, 2,
                 2, 3, 0
         };
 
-        float[] tcs = new float[] {
+        float[] tcs = new float[]{
                 0, 1,
                 0, 0,
                 1, 0,
@@ -44,12 +44,12 @@ public class Projectile {
         };
 
         mesh = new VertexArray(vertices, indices, tcs);
-        texture = new Texture("src/main/resources/projectile.png");
+        texture = new Texture("src/main/resources/images/projectile.png");
     }
 
-    public void update(){
-        position.x+= direction.x*speed;
-        position.y+= direction.y*speed;
+    public void update() {
+        position.x += direction.x * speed;
+        position.y += direction.y * speed;
     }
 
     public void render() {

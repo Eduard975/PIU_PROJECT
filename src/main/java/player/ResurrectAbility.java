@@ -7,7 +7,7 @@ import graphic.Texture;
 public class ResurrectAbility extends AbilityBase {
     public ResurrectAbility(int cost, int cooldown, Player player) {
         super(cost, cooldown, player);
-        this.icon = new Texture("src/main/resources/resurectSkill.png");
+        this.icon = new Texture("src/main/resources/images/resurectSkill.png");
     }
 
     public static DeadEnemy enemyToResurrect;

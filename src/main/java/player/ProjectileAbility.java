@@ -5,7 +5,7 @@ import graphic.Texture;
 public class ProjectileAbility extends AbilityBase {
     public ProjectileAbility(int cost, int cooldown, Player player) {
         super(cost, cooldown, player);
-        this.icon = new Texture("src/main/resources/mainSkill.png");
+        this.icon = new Texture("src/main/resources/images/mainSkill.png");
     }
 
     @Override

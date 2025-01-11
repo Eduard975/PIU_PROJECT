@@ -14,7 +14,7 @@ public class Shader {
     public static final int VERTEX_ATTRIB = 0;
     public static final int TCOORD_ATTRIB = 1;
 
-    public static Shader BACKGROUND, PLAYER, SLIME, PROJECTILE, TILE, HP, MP, INVENTORY, ICON, XP;
+    public static Shader BACKGROUND, PLAYER, SLIME, PROJECTILE, TILE, HP, MP, SKILLS, ICON, XP;
 
     private boolean enabled = false;
 
@@ -27,7 +27,7 @@ public class Shader {
 
     public static void loadAll() {
         BACKGROUND = new Shader("src/main/shaders/bg.vert", "src/main/shaders/bg.frag");
-        INVENTORY = new Shader("src/main/shaders/inventory.vert", "src/main/shaders/inventory.frag");
+        SKILLS = new Shader("src/main/shaders/skills.vert", "src/main/shaders/skills.frag");
 
         PLAYER = new Shader("src/main/shaders/player.vert", "src/main/shaders/player.frag");
         SLIME = new Shader("src/main/shaders/slime.vert", "src/main/shaders/slime.frag");

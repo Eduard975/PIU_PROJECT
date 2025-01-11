@@ -67,7 +67,7 @@ public class Slime extends EnemyBase {
         offsetY = (DEFAULT_SPRITE_HEIGHT - spriteHeight) / 2;
 
         spriteSheet = new SpriteSheet(
-                new Texture("src/main/resources/slime.png"),
+                new Texture("src/main/resources/images/slime.png"),
                 DEFAULT_SPRITE_WIDTH, DEFAULT_SPRITE_HEIGHT, 0
         );
 
@@ -156,6 +156,42 @@ public class Slime extends EnemyBase {
         }
     }
 
+    @Override
+    public void update() {
+        if (stunDuration > 0) {
+            stunDuration--;
+            return;
+        }
+        // Update animation
+        updateAnimation();
+
+        float delta = 1.0f / 60.0f; // Fixed delta time if not provided
+
+        // Update pathfinding
+        pathUpdateTimer += delta;
+        if (pathUpdateTimer >= pathUpdateInterval) {
+            updatePath();
+            pathUpdateTimer = 0;
+        }
+
+        // Update movement
+        if (!currentPath.isEmpty() && currentPathIndex < currentPath.size()) {
+            Vector3f targetPos = currentPath.get(currentPathIndex);
+            float dx = targetPos.x - position.x;
+            float dy = targetPos.y - position.y;
+            float distanceSquared = dx * dx + dy * dy;
+
+            if (distanceSquared < NODE_REACH_THRESHOLD) {
+                currentPathIndex++;
+            } else {
+                moveTowardsPoint(targetPos, delta);
+            }
+        } else {
+            // If no path is available, move directly towards the player
+            moveTowardsPoint(targetPlayerPos, delta);
+        }
+    }
+
     public void updatePlayerPos(Vector3f playerPos) {
         if (playerPos == null) {
             if (isDebug) System.out.println("Received null player position");
@@ -198,6 +234,8 @@ public class Slime extends EnemyBase {
     public void render() {
         Shader.SLIME.enable();
         Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(angle)));
+        Shader.SLIME.setUniform1i("isAlly", 0);
+
         texture.bind();
         mesh.render();
         Shader.SLIME.disable();

@@ -52,7 +52,7 @@ public class DeadEnemy {
 
         // Load the sprite sheet with the death animation frames
         spriteSheet = new SpriteSheet(
-                new Texture("src/main/resources/slime_death.png"),
+                new Texture("src/main/resources/images/slime_death.png"),
                 64, 64, 0 // Automatically calculate number of sprites
         );
 
@@ -107,6 +107,7 @@ public class DeadEnemy {
         Shader.SLIME.enable();
 
         Shader.SLIME.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.scale(scaleX, scaleY, 1.0f)));
+        Shader.SLIME.setUniform1i("isAlly", 0);
 
         texture.bind();
         mesh.render();

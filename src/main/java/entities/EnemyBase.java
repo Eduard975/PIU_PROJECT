@@ -16,6 +16,7 @@ public abstract class EnemyBase {
     public float[] tcs;
     public Sprite sprite;
     public float hp = 100;
+    public int stunDuration = 0;
 
     public EnemyBase(Vector3f pos) {
         position = pos;

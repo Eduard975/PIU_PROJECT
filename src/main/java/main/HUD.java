@@ -12,20 +12,21 @@ import player.Player;
 import java.util.List;
 
 public class HUD {
-    private VertexArray hpBar, mpBar, inventoryBar, abilityIcon, xpBar;
+    private final VertexArray hpBar, mpBar, skillBar, abilityIcon, xpBar;
 
-    private Player player;
+    private final Player player;
 
     private AbilityManager abilityManager;
+    private final List<AbilityBase> abilities;
 
+    private final Texture inventoryTexture;
 
-    private Texture inventoryTexture;
+    private final float[] hpVertices, mpVertices, xpVertices, sbVertices, iconVertices;
 
-    private float[] hpVertices, mpVertices, xpVertices, invVertices, iconVertices;
-    private List<AbilityBase> abilities;
-    float invWidth = 316 * 0.75f;
-    float invHeight = 84 * 0.75f;
-    float iconSize = 64 * 0.75f;
+    float scale = 0.75f;
+    float sbWidth = 316 * scale;
+    float sbHeight = 84 * scale;
+    float iconSize = 64 * scale;
     float resourceBarHeight = 15f;
     float resourceBarWidth = 200f;
 
@@ -68,11 +69,11 @@ public class HUD {
                 resourceBarWidth, 0.0f, 0.0f
         };
 
-        invVertices = new float[]{
+        sbVertices = new float[]{
                 0.0f, 0.0f, 0.0f,
-                0.0f, invHeight, 0.0f,
-                invWidth, invHeight, 0.0f,
-                invWidth, 0.0f, 0.0f
+                0.0f, sbHeight, 0.0f,
+                sbWidth, sbHeight, 0.0f,
+                sbWidth, 0.0f, 0.0f
         };
 
         iconVertices = new float[]{
@@ -89,8 +90,8 @@ public class HUD {
         abilityIcon = new VertexArray(iconVertices, indices, tcs);
         xpBar = new VertexArray(xpVertices, indices, tcs);
 
-        inventoryBar = new VertexArray(invVertices, indices, tcs);
-        inventoryTexture = new Texture("src/main/resources/inventory.png");
+        skillBar = new VertexArray(sbVertices, indices, tcs);
+        inventoryTexture = new Texture("src/main/resources/images/inventory.png");
     }
 
     private void drawHpBar() {
@@ -107,7 +108,7 @@ public class HUD {
         Shader.HP.disable();
     }
 
-    public void drawMpBar() {
+    private void drawMpBar() {
         Shader.MP.enable();
         float mpRatio = (float) player.mp / player.maxMp;
         mpVertices[6] = mpVertices[9] = resourceBarWidth * mpRatio;
@@ -118,7 +119,23 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight * 2 - 20f, 0.9f)));
         mpBar.render();
         Shader.MP.disable();
+    }
 
+    public void drawXpBar() {
+        Shader.XP.enable();
+        float fullRatio = 1.0f;
+        float[] maxXpVertices = xpVertices.clone();
+        maxXpVertices[6] = maxXpVertices[9] = resourceBarWidth * fullRatio;
+
+        xpBar.updateVertices(maxXpVertices);
+
+        Shader.XP.setUniformMat4f("ml_matrix",
+                Matrix4f.translate(new Vector3f(-Camera.WIDTH + 15,
+                        Camera.HEIGHT - resourceBarHeight * 4 - 15f, 0.9f)));
+        xpBar.render();
+        Shader.XP.disable();
+
+        Shader.XP.setUniform3f("barColor", new Vector3f(0.0f, 1.0f, 0.0f));
         Shader.XP.enable();
         float xpRatio = (float) player.xp / player.nextLevelXp;
         xpVertices[6] = xpVertices[9] = resourceBarWidth * xpRatio;
@@ -130,25 +147,26 @@ public class HUD {
         xpBar.render();
         Shader.XP.disable();
 
-
+        Shader.XP.setUniform3f("barColor", new Vector3f(0.5f, 0.5f, 0.5f));
     }
 
-    public void drawIcon(List<AbilityBase> abilities) {
+
+    private void drawIcon() {
         int offset = 0;
         Shader.ICON.enable();
 
         for (AbilityBase ability : abilities) {
             Texture icon = ability.getIcon();
             Vector3f iconTranslate = new Vector3f(
-                    Camera.WIDTH - invWidth + 12 * 0.75f + offset - 15,
-                    -Camera.HEIGHT + invHeight - iconSize + 10 * 0.75f, 0.9f
+                    Camera.WIDTH - sbWidth + 12 * scale + offset - 15,
+                    -Camera.HEIGHT + sbHeight - iconSize + 10 * scale, 0.9f
             );
 
-            offset += iconSize + 12 * 0.75;
+            offset += iconSize + 12 * scale;
 
             Shader.ICON.setUniformMat4f("ml_matrix",
                     Matrix4f.translate(iconTranslate));
-            
+
             boolean isUsable = ability.canUse(player.mp);
             Shader.ICON.setUniform1i("isUsable", isUsable ? 1 : 0);
 
@@ -160,22 +178,25 @@ public class HUD {
         Shader.ICON.disable();
     }
 
-    public void render() {
-        drawHpBar();
-        drawMpBar();
-        Shader.INVENTORY.enable();
+    private void drawSkillBar() {
+        Shader.SKILLS.enable();
         Vector3f invTranslate = new Vector3f(
-                Camera.WIDTH - invWidth - 15,
+                Camera.WIDTH - sbWidth - 15,
                 -Camera.HEIGHT + 15, 0.9f
         );
 
-        Shader.INVENTORY.setUniformMat4f("ml_matrix", Matrix4f.translate(invTranslate));
+        Shader.SKILLS.setUniformMat4f("ml_matrix", Matrix4f.translate(invTranslate));
         inventoryTexture.bind();
-        inventoryBar.render();
+        skillBar.render();
 
-        Shader.INVENTORY.disable();
-
-        drawIcon(abilities);
+        Shader.SKILLS.disable();
     }
 
+    public void render() {
+        drawHpBar();
+        drawMpBar();
+        drawSkillBar();
+        drawXpBar();
+        drawIcon();
+    }
 }

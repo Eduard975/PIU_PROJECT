@@ -1,30 +1,21 @@
 package player;
 
 import entities.Ally;
-import entities.DeadEnemy;
-import entities.EnemyBase;
-import entities.EnemyManager;
+import graphic.Shader;
 import graphic.Texture;
 import graphic.VertexArray;
-import graphic.Shader;
-import graphic.Window;
-import main.CollisionManager;
-import main.MouseInput;
 import map.Level;
 import math.Matrix4f;
 import math.Vector3f;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
-
-import static org.lwjgl.glfw.GLFW.*;
 
 public class Player {
     private float SIZE = Level.TILE_SIZE / 2.0f;
     private VertexArray mesh;
     private Texture texture;
 
-    public float speed = SIZE/4;
+    public float speed = SIZE / 4;
 
 
     public ArrayList<Projectile> projectiles = new ArrayList<>();
@@ -43,16 +34,13 @@ public class Player {
 
     public float hp = 100;
     public float maxHp = 100;
-
     public int mp = 25;
     public int maxMp = 25;
-
     public long mpRegenCooldown = 4000;
     public long lastRegenTime = 0;
 
-    public Player(){
-
-        float[] vertices = new float[] {
+    public Player() {
+        float[] vertices = new float[]{
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,
                 -SIZE / 2.0f, SIZE / 2.0f, 0.2f,
                 SIZE / 2.0f, SIZE / 2.0f, 0.2f,
@@ -72,8 +60,7 @@ public class Player {
         };
 
         mesh = new VertexArray(vertices, indices, tcs);
-        texture = new Texture("src/main/resources/player.png");
-
+        texture = new Texture("src/main/resources/images/player.png");
     }
 
     private boolean canRegenMp() {
@@ -89,16 +76,14 @@ public class Player {
         mp += 5;
     }
 
-    public void update( ){
-
-
+    public void update() {
         for (Projectile projectile : projectiles) {
             projectile.update();
         }
 
         ArrayList<Ally> alliesToRemove = new ArrayList<>();
 
-        for(Ally ally: allies){
+        for (Ally ally : allies) {
             ally.update();
             if (ally.hp <= 0) {
                 alliesToRemove.add(ally);
@@ -109,7 +94,7 @@ public class Player {
             allies.remove(ally);
         }
 
-        if(explosion != null){
+        if (explosion != null) {
             explosion.update();
         }
 
@@ -118,10 +103,10 @@ public class Player {
         regenMP();
     }
 
-    public void checkXp(){
-        if(xp >= nextLevelXp){
+    public void checkXp() {
+        if (xp >= nextLevelXp) {
             xp = nextLevelXp - xp;
-            nextLevelXp = nextLevelXp * (int)Math.pow(1.2, (currentLevel - 1));
+            nextLevelXp = nextLevelXp * (int) Math.pow(1.2, (currentLevel - 1));
             currentLevel++;
         }
 //        System.out.println(xp);
@@ -135,10 +120,10 @@ public class Player {
         for (Projectile projectile : projectiles) {
             projectile.render();
         }
-        for(Ally ally: allies){
+        for (Ally ally : allies) {
             ally.render();
         }
-        if(explosion != null){
+        if (explosion != null) {
             explosion.render();
         }
         Shader.PLAYER.disable();

@@ -111,8 +111,8 @@ public class MainPanel implements Runnable {
         Shader.MP.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.XP.setUniformMat4f("pr_matrix", pr_matrix);
 
-        Shader.INVENTORY.setUniformMat4f("pr_matrix", pr_matrix);
-        Shader.INVENTORY.setUniform1i("tex", 1);
+        Shader.SKILLS.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.SKILLS.setUniform1i("tex", 1);
 
         Shader.ICON.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.ICON.setUniform1i("tex", 1);
@@ -186,8 +186,8 @@ public class MainPanel implements Runnable {
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         level.render();
-        player.render();
         enemyManager.render();
+        player.render();
         hud.render();
     }
 }
