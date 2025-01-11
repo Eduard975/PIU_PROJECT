@@ -65,18 +65,12 @@ public class CollisionManager {
     }
 
     public void checkAOEHit(Explosion explosion, ArrayList<EnemyBase> enemies){
-        float explosionMinX = explosion.position.x - explosion.radius;
-        float explosionMaxX = explosion.position.x + explosion.radius;
-        float explosionMinY = explosion.position.y - explosion.radius;
-        float explosionMaxY = explosion.position.y + explosion.radius;
+        for (EnemyBase enemy : enemies) {
+            float dx = enemy.position.x - explosion.position.x;
+            float dy = enemy.position.y - explosion.position.y;
+            float distance = (float) Math.sqrt(dx * dx + dy * dy);
 
-        for(EnemyBase enemy: enemies){
-
-            Vector3f enemyMin = enemy.getMinBounds();
-            Vector3f enemyMax = enemy.getMaxBounds();
-
-            if (explosionMinX > enemyMin.x && explosionMinX < enemyMax.x &&
-                    explosionMaxY > enemyMin.y && explosionMinY< enemyMax.y) {
+            if (distance <= explosion.radius) {
                 enemy.hp -= explosion.damage;
             }
         }

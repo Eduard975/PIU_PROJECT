@@ -79,6 +79,7 @@ public class AbilityManager {
                     corpseExplosionAbility.use(player.mp);
                     player.mp -= corpseExplosionAbility.getCost();
                     enemyManager.deadEnemies.remove(CorpseExplosionAbility.getEnemyToExplode());
+                    collisionManager.checkAOEHit(player.explosion, enemyManager.enemies);
                 }
             }
         }
