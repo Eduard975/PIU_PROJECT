@@ -14,7 +14,7 @@ public class Shader {
     public static final int VERTEX_ATTRIB = 0;
     public static final int TCOORD_ATTRIB = 1;
 
-    public static Shader BACKGROUND, PLAYER, SLIME, PROJECTILE, TILE, HP, MP, INVENTORY, ICON;
+    public static Shader BACKGROUND, PLAYER, SLIME, PROJECTILE, TILE, HP, MP, INVENTORY, ICON, XP;
 
     private boolean enabled = false;
 
@@ -38,6 +38,7 @@ public class Shader {
 
         ICON = new Shader("src/main/shaders/icon.vert", "src/main/shaders/icon.frag");
 
+        XP = new Shader("src/main/shaders/hp.vert", "src/main/shaders/xp.frag");
     }
 
     public int getUniform(String name) {

@@ -72,6 +72,7 @@ public class EnemyManager {
 
             if (e.hp <= 0) {
                 enemiesToRemove.add(e);
+                player.xp += e.xpWorth;
             }
         }
 

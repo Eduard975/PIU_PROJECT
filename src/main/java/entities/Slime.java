@@ -33,6 +33,7 @@ public class Slime extends EnemyBase {
     private int currentPathIndex;
     private static PathFinder pathFinder;
     private Vector3f targetPlayerPos;
+    private int baseXp = 2;
 
     static {
         pathFinder = new PathFinder(800f, 600f, 16f);
@@ -46,6 +47,8 @@ public class Slime extends EnemyBase {
         super(pos);
         attackDamage = 15;
         attackCooldown = 4000;
+//        TODO SCALE
+        xpWorth = baseXp;
 
         float[] vertices = new float[]{
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,

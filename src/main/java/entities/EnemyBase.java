@@ -27,6 +27,7 @@ public abstract class EnemyBase {
 
     public int attackDamage;
     public int attackCooldown;
+    public int xpWorth;
 
 
     abstract public void update();

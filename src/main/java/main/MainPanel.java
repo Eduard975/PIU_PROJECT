@@ -80,7 +80,7 @@ public class MainPanel implements Runnable {
 
         collisionManager = new CollisionManager();
         player = new Player();
-        level = new Level(player);
+        level = new Level();
         enemyManager = new EnemyManager(player);
         abilityManager = new AbilityManager(player, enemyManager, collisionManager);
         hud = new HUD(player, abilityManager);
@@ -109,6 +109,7 @@ public class MainPanel implements Runnable {
 
         Shader.HP.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.MP.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.XP.setUniformMat4f("pr_matrix", pr_matrix);
 
         Shader.INVENTORY.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.INVENTORY.setUniform1i("tex", 1);
