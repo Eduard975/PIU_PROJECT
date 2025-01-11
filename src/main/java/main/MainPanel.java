@@ -11,6 +11,7 @@ import math.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import player.AbilityManager;
 import player.Player;
+import sound.SoundPlayer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -38,6 +39,7 @@ public class MainPanel implements Runnable {
     private CollisionManager collisionManager;
 
     private Camera camera;
+    private SoundPlayer soundPlayer;
 
     private MouseInput cursorPos;
 
@@ -81,8 +83,10 @@ public class MainPanel implements Runnable {
         collisionManager = new CollisionManager();
         player = new Player();
         level = new Level();
+        soundPlayer = new SoundPlayer();
         enemyManager = new EnemyManager(player);
-        abilityManager = new AbilityManager(player, enemyManager, collisionManager);
+
+        abilityManager = new AbilityManager(player, enemyManager, collisionManager, soundPlayer);
         hud = new HUD(player, abilityManager);
 
 
