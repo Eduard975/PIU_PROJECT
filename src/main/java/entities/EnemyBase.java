@@ -18,7 +18,7 @@ public abstract class EnemyBase {
     public float hp = 100;
     public int stunDuration = 0;
     protected float enemyScale;
-    public long attackCooldownTimer = 0;
+    public long attackCooldownTimer = 999999;
 
 
     public EnemyBase(Vector3f pos) {
