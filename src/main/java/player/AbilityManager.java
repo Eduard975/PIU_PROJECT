@@ -17,6 +17,7 @@ public class AbilityManager {
     private final ProjectileAbility projectileAbility;
     private final ResurrectAbility resurrectAbility;
     private final CorpseExplosionAbility corpseExplosionAbility;
+    private final StunAbility stunAbility;
 
     long windowId = org.lwjgl.glfw.GLFW.glfwGetCurrentContext();
 
@@ -28,6 +29,7 @@ public class AbilityManager {
         projectileAbility = new ProjectileAbility(5, 2000, this.player);
         resurrectAbility = new ResurrectAbility(10, 2000, this.player);
         corpseExplosionAbility = new CorpseExplosionAbility(10, 2000, this.player);
+        stunAbility = new StunAbility(10, 2000, this.player);
     }
 
     public void update() {
@@ -85,6 +87,15 @@ public class AbilityManager {
                 }
             }
         }
+
+        if (glfwGetKey(windowId, GLFW_KEY_Q) == GLFW_PRESS) {
+            if (stunAbility.canUse(player.mp)) {
+                if (collisionManager.checkEnemyMouseCollision(player.getMousePosition(), enemyManager.enemies)) {
+                    stunAbility.use(player.mp);
+                    player.mp -= stunAbility.getCost();
+                }
+            }
+        }
     }
 
 
@@ -93,6 +104,7 @@ public class AbilityManager {
         abilitiesIcons.add(projectileAbility);
         abilitiesIcons.add(resurrectAbility);
         abilitiesIcons.add(corpseExplosionAbility);
+        abilitiesIcons.add(stunAbility);
 
         return abilitiesIcons;
     }
