@@ -119,7 +119,23 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight * 2 - 20f, 0.9f)));
         mpBar.render();
         Shader.MP.disable();
+    }
 
+    public void drawXpBar() {
+        Shader.XP.enable();
+        float fullRatio = 1.0f;
+        float[] maxXpVertices = xpVertices.clone();
+        maxXpVertices[6] = maxXpVertices[9] = resourceBarWidth * fullRatio;
+
+        xpBar.updateVertices(maxXpVertices);
+
+        Shader.XP.setUniformMat4f("ml_matrix",
+                Matrix4f.translate(new Vector3f(-Camera.WIDTH + 15,
+                        Camera.HEIGHT - resourceBarHeight * 4 - 15f, 0.9f)));
+        xpBar.render();
+        Shader.XP.disable();
+
+        Shader.XP.setUniform3f("barColor", new Vector3f(0.0f, 1.0f, 0.0f));
         Shader.XP.enable();
         float xpRatio = (float) player.xp / player.nextLevelXp;
         xpVertices[6] = xpVertices[9] = resourceBarWidth * xpRatio;
@@ -130,7 +146,10 @@ public class HUD {
                         Camera.HEIGHT - resourceBarHeight * 4 - 15f, 0.9f)));
         xpBar.render();
         Shader.XP.disable();
+
+        Shader.XP.setUniform3f("barColor", new Vector3f(0.5f, 0.5f, 0.5f));
     }
+
 
     private void drawIcon() {
         int offset = 0;
@@ -177,8 +196,7 @@ public class HUD {
         drawHpBar();
         drawMpBar();
         drawSkillBar();
-
+        drawXpBar();
         drawIcon();
     }
-
 }

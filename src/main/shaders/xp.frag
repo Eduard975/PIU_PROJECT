@@ -2,10 +2,9 @@
 
 layout(location = 0) out vec4 color;
 
-//uniform sampler2D tex;
-
+uniform vec3 barColor;
 
 void main()
 {
-    color = vec4(0.0, 1.0, 0.0, 0.0);
+    color = vec4(barColor, 1.0);
 }

@@ -1,10 +1,7 @@
 package entities;
 
 import ai.PathFinder;
-import graphic.Shader;
-import graphic.SpriteSheet;
-import graphic.Texture;
-import graphic.VertexArray;
+import graphic.*;
 import math.Matrix4f;
 import math.Vector3f;
 
@@ -21,12 +18,13 @@ public class Slime extends EnemyBase {
     private static final int DEFAULT_SPRITE_WIDTH = 64;
     private static final int DEFAULT_SPRITE_HEIGHT = 64;
     private static final float NODE_REACH_THRESHOLD = 4.0f;
+    private static final float DIRECT_FOLLOW_DISTANCE = 100.0f;
 
     private int spriteWidth;
     private int spriteHeight;
     private int offsetX;
     private int offsetY;
-    private float moveSpeed = 100.0f;
+    private float moveSpeed = 200.0f;
     private float pathUpdateInterval = 0.25f;
     private float pathUpdateTimer = 0;
     private List<Vector3f> currentPath;
@@ -34,9 +32,10 @@ public class Slime extends EnemyBase {
     private static PathFinder pathFinder;
     private Vector3f targetPlayerPos;
     private int baseXp = 2;
+    private boolean isDebug = false;
 
     static {
-        pathFinder = new PathFinder(800f, 600f, 16f);
+        pathFinder = new PathFinder(1280f, 720f, 16f);
     }
 
     public Slime(Vector3f pos) {
@@ -102,15 +101,10 @@ public class Slime extends EnemyBase {
         }
     }
 
-    private void updatePath() {
-        List<Vector3f> newPath = pathFinder.findPath(position, targetPlayerPos);
-        if (!newPath.isEmpty()) {
-            currentPath = newPath;
-            currentPathIndex = 0;
-        }
-    }
-
     private void moveTowardsPoint(Vector3f target, float delta) {
+        if (target == null) return;
+
+        // Calculate direction
         float dx = target.x - position.x;
         float dy = target.y - position.y;
         float distance = (float) Math.sqrt(dx * dx + dy * dy);
@@ -119,10 +113,17 @@ public class Slime extends EnemyBase {
             float moveX = (dx / distance) * moveSpeed * delta;
             float moveY = (dy / distance) * moveSpeed * delta;
 
+            // Update position
             position.x += moveX;
             position.y += moveY;
 
+            // Update angle for sprite rotation
             angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+
+            if (isDebug) {
+                System.out.println("Move amount: " + moveX + ", " + moveY);
+                System.out.println("New position: " + position);
+            }
         }
     }
 
@@ -132,46 +133,69 @@ public class Slime extends EnemyBase {
             stunDuration--;
             return;
         }
-        // Update animation
         updateAnimation();
+        float delta = 1.0f / 60.0f;
 
-        float delta = 1.0f / 60.0f; // Fixed delta time if not provided
-
-        // Update pathfinding
-        pathUpdateTimer += delta;
-        if (pathUpdateTimer >= pathUpdateInterval) {
-            updatePath();
-            pathUpdateTimer = 0;
+        if (targetPlayerPos == null) {
+            if (isDebug) System.out.println("No player position set");
+            return;
         }
 
-        // Update movement
-        if (!currentPath.isEmpty() && currentPathIndex < currentPath.size()) {
-            Vector3f targetPos = currentPath.get(currentPathIndex);
-            float dx = targetPos.x - position.x;
-            float dy = targetPos.y - position.y;
-            float distanceSquared = dx * dx + dy * dy;
+        // Simple distance check
+        float dx = targetPlayerPos.x - position.x;
+        float dy = targetPlayerPos.y - position.y;
+        float distanceToPlayer = (float) Math.sqrt(dx * dx + dy * dy);
 
-            if (distanceSquared < NODE_REACH_THRESHOLD) {
-                currentPathIndex++;
-            } else {
-                moveTowardsPoint(targetPos, delta);
-            }
-        } else {
-            // If no path is available, move directly towards the player
+        if (isDebug) {
+            System.out.println("Distance to player: " + distanceToPlayer);
+            System.out.println("Current position: " + position);
+            System.out.println("Target position: " + targetPlayerPos);
+        }
+
+        if (distanceToPlayer > 1.0f) {
             moveTowardsPoint(targetPlayerPos, delta);
+            if (isDebug) System.out.println("Moving towards player");
         }
     }
 
     public void updatePlayerPos(Vector3f playerPos) {
-        this.targetPlayerPos.x = playerPos.x;
-        this.targetPlayerPos.y = playerPos.y;
-        this.targetPlayerPos.z = playerPos.z;
+        if (playerPos == null) {
+            if (isDebug) System.out.println("Received null player position");
+            return;
+        }
+
+        if (this.targetPlayerPos == null) {
+            this.targetPlayerPos = new Vector3f(playerPos.x, playerPos.y, playerPos.z);
+        } else {
+            this.targetPlayerPos.x = playerPos.x;
+            this.targetPlayerPos.y = playerPos.y;
+            this.targetPlayerPos.z = playerPos.z;
+        }
+
+        if (isDebug) {
+            System.out.println("Updated player position to: " + this.targetPlayerPos);
+        }
     }
 
-    public static void setObstacle(Vector3f position, boolean isObstacle) {
-        pathFinder.setObstacle(position, isObstacle);
-    }
+    private void updatePath() {
+        // Only update path if we have a valid player position
+        if (targetPlayerPos != null) {
+            // Clamp target position to window bounds
+            float clampedX = Math.max(SIZE/2, Math.min(targetPlayerPos.x, Window.WIDTH - SIZE/2));
+            float clampedY = Math.max(SIZE/2, Math.min(targetPlayerPos.y, Window.HEIGHT - SIZE/2));
+            Vector3f clampedTarget = new Vector3f(clampedX, clampedY, targetPlayerPos.z);
 
+            List<Vector3f> newPath = pathFinder.findPath(position, clampedTarget);
+            if (newPath != null && !newPath.isEmpty()) {
+                currentPath = newPath;
+                currentPathIndex = 0;
+            } else {
+                // Clear the current path if we couldn't find a new one
+                currentPath = null;
+                currentPathIndex = 0;
+            }
+        }
+    }
     @Override
     public void render() {
         Shader.SLIME.enable();

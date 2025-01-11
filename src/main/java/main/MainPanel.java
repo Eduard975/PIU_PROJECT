@@ -190,8 +190,8 @@ public class MainPanel implements Runnable {
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         level.render();
-        player.render();
         enemyManager.render();
+        player.render();
         hud.render();
     }
 }
