@@ -9,8 +9,6 @@ public class ProjectileAbility extends AbilityBase{
 
     @Override
     public void useEffect() {
-        Vector3f position = player.getPosition();
-        float angle = player.getAngle();
-        player.projectiles.add(new Projectile(position, angle));
+        player.projectiles.add(new Projectile(player.getPosition(), player.getAngle(), player.getProjectileDirection()));
     }
 }

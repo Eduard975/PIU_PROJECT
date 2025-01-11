@@ -1,5 +1,6 @@
 package math;
 
+import org.joml.Vector4f;
 import utils.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -16,6 +17,13 @@ public class Matrix4f {
 
     public Matrix4f() {
 
+    }
+
+    public Matrix4f(Vector3f input) {
+        Arrays.fill(elements, 0.0f);
+        elements[0] = input.x;
+        elements[5] = input.y;
+        elements[10] = input.z;
     }
 
 
@@ -109,5 +117,55 @@ public class Matrix4f {
 
     public FloatBuffer toFloatBuffer() {
         return BufferUtils.createFloatBuffer(elements);
+    }
+
+    public Matrix4f invert() {
+        Matrix4f result = new Matrix4f();
+
+        float[] m = this.elements;
+
+        float t0 = m[0] * m[5] - m[1] * m[4];
+        float t1 = m[0] * m[6] - m[2] * m[4];
+        float t2 = m[0] * m[7] - m[3] * m[4];
+        float t3 = m[1] * m[6] - m[2] * m[5];
+        float t4 = m[1] * m[7] - m[3] * m[5];
+        float t5 = m[2] * m[7] - m[3] * m[6];
+        float t6 = m[8] * m[13] - m[9] * m[12];
+        float t7 = m[8] * m[14] - m[10] * m[12];
+        float t8 = m[8] * m[15] - m[11] * m[12];
+        float t9 = m[9] * m[14] - m[10] * m[13];
+        float t10 = m[9] * m[15] - m[11] * m[13];
+        float t11 = m[10] * m[15] - m[11] * m[14];
+
+        float det = t0 * t11 - t1 * t10 + t2 * t9 + t3 * t8 - t4 * t7 + t5 * t6;
+
+        float invDet = 1.0f / det;
+
+        result.elements[0]  = (m[5] * t11 - m[6] * t10 + m[7] * t9) * invDet;
+        result.elements[1]  = (-m[1] * t11 + m[2] * t10 - m[3] * t9) * invDet;
+        result.elements[2]  = (m[13] * t5 - m[14] * t4 + m[15] * t3) * invDet;
+        result.elements[3]  = (-m[9] * t5 + m[10] * t4 - m[11] * t3) * invDet;
+        result.elements[4]  = (-m[4] * t11 + m[6] * t8 - m[7] * t7) * invDet;
+        result.elements[5]  = (m[0] * t11 - m[2] * t8 + m[3] * t7) * invDet;
+        result.elements[6]  = (-m[12] * t5 + m[14] * t2 - m[15] * t1) * invDet;
+        result.elements[7]  = (m[8] * t5 - m[10] * t2 + m[11] * t1) * invDet;
+        result.elements[8]  = (m[4] * t10 - m[5] * t8 + m[7] * t6) * invDet;
+        result.elements[9]  = (-m[0] * t10 + m[1] * t8 - m[3] * t6) * invDet;
+        result.elements[10] = (m[12] * t4 - m[13] * t2 + m[15] * t0) * invDet;
+        result.elements[11] = (-m[8] * t4 + m[9] * t2 - m[11] * t0) * invDet;
+        result.elements[12] = (-m[4] * t9 + m[5] * t7 - m[6] * t6) * invDet;
+        result.elements[13] = (m[0] * t9 - m[1] * t7 + m[2] * t6) * invDet;
+        result.elements[14] = (-m[12] * t3 + m[13] * t1 - m[14] * t0) * invDet;
+        result.elements[15] = (m[8] * t3 - m[9] * t1 + m[10] * t0) * invDet;
+
+        return result;
+    }
+
+    public Vector3f multiply(Vector3f vector) {
+        float x = elements[0] * vector.x + elements[4] * vector.y + elements[8]  * vector.z;
+        float y = elements[1] * vector.x + elements[5] * vector.y + elements[9]  * vector.z;
+        float z = elements[2] * vector.x + elements[6] * vector.y + elements[10] * vector.z;
+
+        return new Vector3f(x, y, z);
     }
 }

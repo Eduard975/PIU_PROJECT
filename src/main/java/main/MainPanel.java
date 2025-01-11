@@ -156,22 +156,22 @@ public class MainPanel implements Runnable {
 
     private void update() {
         window.update();
-//        Vector3f mousePos = cursorPos.getMousePosition();
         player.update();
         level.update();
         collisionManager.checkProjectilesCollision(player.projectiles, enemyManager.enemies);
         enemyManager.update();
-//        enemyManager.enemies.forEach(e -> System.out.println(e.hp));
         camera.update();
 
         collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
-        System.out.println("Player hp: " + player.hp);
-//        System.out.println("Player hp: " + player.hp);
 
-//
-//        Vector3f mousePos = cursorPos.getMousePosition();
-//
+
+        Vector3f mousePos = cursorPos.getMouseWorldPosition(camera.getProjectionMatrix(), camera.position);
+        player.setAngle(cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
+        player.setProjectileDirection(mousePos);
+        System.out.println("Angle :" + cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
+
 //        System.out.println("Mouse X: " + mousePos.x + ", Mouse Y: " + mousePos.y);
+//        System.out.println("Player X: " + player.getX() + ", Player Y: " + player.getY());
     }
 
     private void render() {

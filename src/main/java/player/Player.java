@@ -27,6 +27,7 @@ public class Player {
 
     private float angle;
     private Vector3f position = new Vector3f();
+    private Vector3f projectileDirection;
 
     private AbilityBase[] abilities;
 
@@ -130,7 +131,7 @@ public class Player {
 
     public void render() {
         Shader.PLAYER.enable();
-        Shader.PLAYER.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(angle)));
+        Shader.PLAYER.setUniformMat4f("ml_matrix", Matrix4f.translate(position));
         texture.bind();
         mesh.render();
         for(Projectile projectile : projectiles){
@@ -163,5 +164,17 @@ public class Player {
 
     public Vector3f getMaxBounds() {
         return new Vector3f(position.x + SIZE / 2, position.y + SIZE / 2, 0);
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
+    public void setProjectileDirection(Vector3f projectileDirection) {
+        this.projectileDirection = new Vector3f(projectileDirection.x - position.x, projectileDirection.y - position.y, 0.0f);
+    }
+
+    public Vector3f getProjectileDirection(){
+        return projectileDirection;
     }
 }

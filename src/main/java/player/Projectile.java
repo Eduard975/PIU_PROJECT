@@ -14,18 +14,21 @@ public class Projectile {
 
     private float angle;
     private Vector3f position;
+    private Vector3f direction;
+    private float speed = 10;
 
     public float damage = 100;
 
-    public Projectile(Vector3f playerPosition, float playerAngle) {
+    public Projectile(Vector3f playerPosition, float playerAngle, Vector3f projectileDirection) {
         angle = playerAngle;
         position = new Vector3f(playerPosition.x, playerPosition.y, playerPosition.z);
+        direction = new Vector3f(projectileDirection.x, projectileDirection.y, projectileDirection.z).normalize();
 
         float[] vertices = new float[] {
-                -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,
-                -SIZE / 2.0f,  SIZE / 2.0f, 0.2f,
-                 SIZE / 2.0f,  SIZE / 2.0f, 0.2f,
-                 SIZE / 2.0f, -SIZE / 2.0f, 0.2f
+                -SIZE / 2.0f, -SIZE / 2.0f, 0.5f,
+                -SIZE / 2.0f,  SIZE / 2.0f, 0.5f,
+                 SIZE / 2.0f,  SIZE / 2.0f, 0.5f,
+                 SIZE / 2.0f, -SIZE / 2.0f, 0.5f
         };
 
         byte[] indices = new byte[] {
@@ -45,7 +48,8 @@ public class Projectile {
     }
 
     public void update(){
-        position.x+=10;
+        position.x+= direction.x*speed;
+        position.y+= direction.y*speed;
     }
 
     public void render() {
