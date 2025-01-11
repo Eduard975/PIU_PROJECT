@@ -5,6 +5,7 @@ import graphic.Texture;
 import graphic.VertexArray;
 import math.Matrix4f;
 import math.Vector3f;
+import player.AbilityBase;
 import player.AbilityManager;
 import player.Player;
 
@@ -21,7 +22,7 @@ public class HUD {
     private Texture inventoryTexture;
 
     private float[] hpVertices, mpVertices, invVertices, iconVertices;
-    private List<Texture> abilityIcons;
+    private List<AbilityBase> abilities;
     float invWidth = 316 * 0.75f;
     float invHeight = 84 * 0.75f;
     float iconSize = 64 * 0.75f;
@@ -44,7 +45,7 @@ public class HUD {
         this.player = player;
         this.abilityManager = abilityManager;
 
-        abilityIcons = abilityManager.getAbilities();
+        abilities = abilityManager.getAbilities();
 
         hpVertices = new float[]{
                 0.0f, 0.0f, 0.0f,
@@ -111,12 +112,12 @@ public class HUD {
         Shader.MP.disable();
     }
 
-    public void drawIcon(List<Texture> abilityIcons) {
+    public void drawIcon(List<AbilityBase> abilities) {
         int offset = 0;
         Shader.ICON.enable();
 
-        for (Texture icon : abilityIcons) {
-
+        for (AbilityBase ability : abilities) {
+            Texture icon = ability.getIcon();
             Vector3f iconTranslate = new Vector3f(
                     Camera.WIDTH - invWidth + 12 * 0.75f + offset - 15,
                     -Camera.HEIGHT + invHeight - iconSize + 10 * 0.75f, 0.9f
@@ -126,6 +127,9 @@ public class HUD {
 
             Shader.ICON.setUniformMat4f("ml_matrix",
                     Matrix4f.translate(iconTranslate));
+            
+            boolean isUsable = ability.canUse(player.mp);
+            Shader.ICON.setUniform1i("isUsable", isUsable ? 1 : 0);
 
             icon.bind();
 
@@ -133,8 +137,6 @@ public class HUD {
 
         }
         Shader.ICON.disable();
-
-
     }
 
     public void render() {
@@ -152,7 +154,7 @@ public class HUD {
 
         Shader.INVENTORY.disable();
 
-        drawIcon(abilityIcons);
+        drawIcon(abilities);
     }
 
 }

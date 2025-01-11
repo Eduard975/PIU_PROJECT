@@ -1,7 +1,6 @@
 package player;
 
 import entities.EnemyManager;
-import graphic.Texture;
 import main.CollisionManager;
 import map.Level;
 
@@ -89,11 +88,11 @@ public class AbilityManager {
     }
 
 
-    public List<Texture> getAbilities() {
-        List<Texture> abilitiesIcons = new ArrayList<>();
-        abilitiesIcons.add(projectileAbility.getIcon());
-        abilitiesIcons.add(resurrectAbility.getIcon());
-        abilitiesIcons.add(corpseExplosionAbility.getIcon());
+    public List<AbilityBase> getAbilities() {
+        List<AbilityBase> abilitiesIcons = new ArrayList<>();
+        abilitiesIcons.add(projectileAbility);
+        abilitiesIcons.add(resurrectAbility);
+        abilitiesIcons.add(corpseExplosionAbility);
 
         return abilitiesIcons;
     }
