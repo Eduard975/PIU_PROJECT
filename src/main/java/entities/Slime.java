@@ -128,6 +128,10 @@ public class Slime extends EnemyBase {
 
     @Override
     public void update() {
+        if(stunDuration > 0){
+            stunDuration--;
+            return;
+        }
         // Update animation
         updateAnimation();
 
