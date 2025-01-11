@@ -78,11 +78,12 @@ public class MainPanel implements Runnable {
         window = new Window("NecroLord");
         running = true;
 
-        enemyManager = new EnemyManager();
         collisionManager = new CollisionManager();
         player = new Player(enemyManager, collisionManager);
         level = new Level(player);
         hud = new HUD(player);
+        enemyManager = new EnemyManager(player);
+
 
         camera = new Camera(new Vector3f(0, 0, 0), player);
 
