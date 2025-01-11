@@ -33,7 +33,7 @@ public class CollisionManager {
     public void checkPlayerEnemyCollision(Player player, ArrayList<EnemyBase> enemies) {
         Vector3f playerMin = player.getMinBounds();
         Vector3f playerMax = player.getMaxBounds();
-        
+
         for (EnemyBase enemy : enemies) {
             Vector3f enemyMin = enemy.getMinBounds();
             Vector3f enemyMax = enemy.getMaxBounds();
@@ -52,7 +52,6 @@ public class CollisionManager {
 
     public boolean checkDeadEnemyMouseCollision(Vector3f MousePosition, ArrayList<DeadEnemy> deadEnemies) {
         float mouseMinX = MousePosition.x - 5;
-        float mouseMaxX = MousePosition.x + 5;
         float mouseMinY = MousePosition.y - 5;
         float mouseMaxY = MousePosition.y + 5;
 
@@ -71,7 +70,6 @@ public class CollisionManager {
 
     public boolean checkEnemyMouseCollision(Vector3f MousePosition, ArrayList<EnemyBase> enemies) {
         float mouseMinX = MousePosition.x - 5;
-        float mouseMaxX = MousePosition.x + 5;
         float mouseMinY = MousePosition.y - 5;
         float mouseMaxY = MousePosition.y + 5;
 
