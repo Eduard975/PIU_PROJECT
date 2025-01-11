@@ -1,10 +1,11 @@
 package player;
 
-import math.Vector3f;
+import graphic.Texture;
 
-public class ProjectileAbility extends AbilityBase{
+public class ProjectileAbility extends AbilityBase {
     public ProjectileAbility(int cost, int cooldown, Player player) {
         super(cost, cooldown, player);
+        this.icon = new Texture("src/main/resources/mainSkill.png");
     }
 
     @Override

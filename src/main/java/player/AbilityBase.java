@@ -1,10 +1,14 @@
 package player;
 
+import graphic.Texture;
+
 public abstract class AbilityBase {
     protected int cost;
     protected long cooldown;
     protected long lastUsedTime;
     protected final Player player;
+
+    protected Texture icon;
 
     public AbilityBase(int cost, int cooldown, Player player) {
         this.cost = cost;
@@ -35,7 +39,7 @@ public abstract class AbilityBase {
         this.cost = cost;
     }
 
-    public void setCooldown(long cooldown){
+    public void setCooldown(long cooldown) {
         this.cooldown = cooldown;
     }
 

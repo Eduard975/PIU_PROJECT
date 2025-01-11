@@ -2,17 +2,14 @@ package main;
 
 
 import entities.EnemyManager;
-import entities.Slime;
-import graphic.SpriteSheet;
-import graphic.Texture;
-import math.Vector3f;
-import org.lwjgl.glfw.GLFWCursorPosCallback;
-import player.Player;
 import graphic.Shader;
+import graphic.SpriteSheet;
 import graphic.Window;
 import map.Level;
 import math.Matrix4f;
+import math.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import player.Player;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -107,6 +104,9 @@ public class MainPanel implements Runnable {
 
         Shader.HP.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.MP.setUniformMat4f("pr_matrix", pr_matrix);
+
+        Shader.INVENTORY.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.INVENTORY.setUniform1i("tex", 1);
     }
 
 
@@ -168,7 +168,7 @@ public class MainPanel implements Runnable {
         Vector3f mousePos = cursorPos.getMouseWorldPosition(camera.getProjectionMatrix(), camera.position);
         player.setAngle(cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
         player.setProjectileDirection(mousePos);
-        System.out.println("Angle :" + cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
+//      System.out.println("Angle :" + cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
 
 //        System.out.println("Mouse X: " + mousePos.x + ", Mouse Y: " + mousePos.y);
 //        System.out.println("Player X: " + player.getX() + ", Player Y: " + player.getY());
