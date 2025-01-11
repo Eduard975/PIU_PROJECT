@@ -124,7 +124,7 @@ public class Player {
             nextLevelXp = nextLevelXp * (int)Math.pow(1.2, (currentLevel - 1));
             currentLevel++;
         }
-        System.out.println(xp);
+//        System.out.println(xp);
     }
 
     public void render() {
