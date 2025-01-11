@@ -15,9 +15,6 @@ public class Level {
     public static final int TILE_SIZE = Window.WIDTH / 8;
     public static final int xBounds = Window.WIDTH;
     public static final int yBounds = Window.HEIGHT;
-    private float xScroll = 0;
-    private float yScroll = 0;
-
 
     public Level() {
 
@@ -55,7 +52,7 @@ public class Level {
         Shader.BACKGROUND.enable();
         background.bind();
 
-        Shader.BACKGROUND.setUniformMat4f("vw_matrix", Matrix4f.translate(new Vector3f(xScroll, yScroll, 0.0f)));
+        Shader.BACKGROUND.setUniformMat4f("vw_matrix", Matrix4f.translate(new Vector3f(0.0f, 0.0f, 0.0f)));
 
         background.draw();
 
