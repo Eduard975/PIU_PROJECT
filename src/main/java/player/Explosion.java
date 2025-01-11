@@ -57,7 +57,7 @@ public class Explosion {
             Shader.PROJECTILE.enable();
             Shader.PROJECTILE.setUniformMat4f("ml_matrix", Matrix4f.translate(position).multiply(Matrix4f.rotate(-90)).multiply(Matrix4f.scale(scaleAnimation, scaleAnimation, 1.0f)));
             scaleAnimation += 0.035f;
-            scaleAnimation = scaleAnimation > 1.0f ? 1.0f : scaleAnimation;
+            scaleAnimation = Math.min(scaleAnimation, 1.0f);
             texture.bind();
             mesh.render();
             Shader.PROJECTILE.disable();
