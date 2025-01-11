@@ -188,6 +188,7 @@ public class MainPanel implements Runnable {
         player.update();
         level.update();
         collisionManager.checkProjectilesCollision(player.projectiles, enemyManager.enemies);
+        collisionManager.checkAllyEnemyCollisions(enemyManager.enemies, player.allies);
         enemyManager.update();
         camera.update();
         collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);

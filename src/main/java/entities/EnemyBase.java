@@ -18,6 +18,8 @@ public abstract class EnemyBase {
     public float hp = 100;
     public int stunDuration = 0;
     protected float enemyScale;
+    public long attackCooldownTimer = 0;
+
 
     public EnemyBase(Vector3f pos) {
         position = pos;
@@ -43,4 +45,6 @@ public abstract class EnemyBase {
     public Vector3f getMaxBounds() {
         return new Vector3f(position.x + SIZE / 2, position.y + SIZE / 2, 0);
     }
+
+    abstract public boolean canAttack();
 }

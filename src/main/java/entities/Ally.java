@@ -37,7 +37,7 @@ public class Ally extends EnemyBase {
     public Ally(Vector3f pos, int mySpriteWidth, int mySpriteHeight) {
         super(pos);
         attackDamage = 15;
-        attackCooldown = 4000;
+        attackCooldown = 2000;
 
         float[] vertices = new float[]{
                 -SIZE / 2.0f, -SIZE / 2.0f, 0.2f,
@@ -160,5 +160,15 @@ public class Ally extends EnemyBase {
         texture.bind();
         mesh.render();
         Shader.SLIME.disable();
+    }
+
+    @Override
+    public boolean canAttack(){
+        if (attackCooldownTimer >= attackCooldown) {
+            attackCooldownTimer = 0;
+            return true;
+        }
+        attackCooldownTimer += System.currentTimeMillis() - lastFrameTime;
+        return false;
     }
 }

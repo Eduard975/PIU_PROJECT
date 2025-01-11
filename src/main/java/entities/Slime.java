@@ -45,7 +45,7 @@ public class Slime extends EnemyBase {
     public Slime(Vector3f pos, int mySpriteWidth, int mySpriteHeight, float enemyScale) {
         super(pos);
         attackDamage = (int) (15 * enemyScale);
-        attackCooldown = 4000;
+        attackCooldown = 2000;
 //        TODO SCALE
         xpWorth = baseXp;
 
@@ -100,7 +100,6 @@ public class Slime extends EnemyBase {
             mesh.updateTexCoords(tcs);
         }
     }
-
 
 
     @Override
@@ -209,5 +208,15 @@ public class Slime extends EnemyBase {
         texture.bind();
         mesh.render();
         Shader.SLIME.disable();
+    }
+
+    @Override
+    public boolean canAttack(){
+        if (attackCooldownTimer >= attackCooldown) {
+            attackCooldownTimer = 0;
+            return true;
+        }
+        attackCooldownTimer += System.currentTimeMillis() - lastFrameTime;
+        return false;
     }
 }

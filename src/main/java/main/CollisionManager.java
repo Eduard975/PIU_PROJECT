@@ -1,5 +1,6 @@
 package main;
 
+import entities.Ally;
 import entities.DeadEnemy;
 import entities.EnemyBase;
 import math.Vector3f;
@@ -40,11 +41,12 @@ public class CollisionManager {
 
             if (playerMin.x > enemyMin.x && playerMin.x < enemyMax.x &&
                     playerMax.y > enemyMin.y && playerMin.y < enemyMax.y && enemy.stunDuration <= 0) {
-                if (player.hp <= 0) {
-                    player.hp = 0;
-                } else {
-                    player.hp -= enemy.attackDamage;
-                    // System.out.println("Player HP" + player.hp + "\nEnemy Damage " + enemy.attackDamage);
+                if(enemy.canAttack()){
+                    if (player.hp <= 0) {
+                        player.hp = 0;
+                    } else {
+                        player.hp -= enemy.attackDamage;
+                    }
                 }
             }
         }
@@ -95,6 +97,27 @@ public class CollisionManager {
 
             if (distance <= explosion.radius) {
                 enemy.hp -= explosion.damage;
+            }
+        }
+    }
+
+    public void checkAllyEnemyCollisions(ArrayList<EnemyBase> enemies, ArrayList<Ally> allies){
+        for (Ally ally : allies) {
+            Vector3f allyMin = ally.getMinBounds();
+            Vector3f allyMax = ally.getMaxBounds();
+            for(EnemyBase enemy : enemies){
+                Vector3f enemyMin = enemy.getMinBounds();
+                Vector3f enemyMax = enemy.getMaxBounds();
+                if (allyMin.x > enemyMin.x && allyMin.x < enemyMax.x &&
+                        allyMax.y > enemyMin.y && allyMax.y < enemyMax.y) {
+                    if(enemy.canAttack()){
+                        ally.hp -= enemy.attackDamage;
+                    }
+
+                    if(ally.canAttack()){
+                        enemy.hp -= ally.attackDamage;
+                    }
+                }
             }
         }
     }
