@@ -101,31 +101,7 @@ public class Slime extends EnemyBase {
         }
     }
 
-    private void moveTowardsPoint(Vector3f target, float delta) {
-        if (target == null) return;
 
-        // Calculate direction
-        float dx = target.x - position.x;
-        float dy = target.y - position.y;
-        float distance = (float) Math.sqrt(dx * dx + dy * dy);
-
-        if (distance > 0) {
-            float moveX = (dx / distance) * moveSpeed * delta;
-            float moveY = (dy / distance) * moveSpeed * delta;
-
-            // Update position
-            position.x += moveX;
-            position.y += moveY;
-
-            // Update angle for sprite rotation
-            angle = (float) Math.toDegrees(Math.atan2(dy, dx));
-
-            if (isDebug) {
-                System.out.println("Move amount: " + moveX + ", " + moveY);
-                System.out.println("New position: " + position);
-            }
-        }
-    }
 
     @Override
     public void update() {
@@ -157,6 +133,33 @@ public class Slime extends EnemyBase {
             if (isDebug) System.out.println("Moving towards player");
         }
     }
+
+    private void moveTowardsPoint(Vector3f target, float delta) {
+        if (target == null) return;
+
+        // Calculate direction
+        float dx = target.x - position.x;
+        float dy = target.y - position.y;
+        float distance = (float) Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > 0) {
+            float moveX = (dx / distance) * moveSpeed * delta;
+            float moveY = (dy / distance) * moveSpeed * delta;
+
+            // Update position
+            position.x += moveX;
+            position.y += moveY;
+
+            // Update angle for sprite rotation
+            angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+
+            if (isDebug) {
+                System.out.println("Move amount: " + moveX + ", " + moveY);
+                System.out.println("New position: " + position);
+            }
+        }
+    }
+
 
     public void updatePlayerPos(Vector3f playerPos) {
         if (playerPos == null) {

@@ -1,6 +1,7 @@
 package player;
 
 import entities.Ally;
+import entities.EnemyBase;
 import graphic.Shader;
 import graphic.Texture;
 import graphic.VertexArray;
@@ -9,6 +10,7 @@ import math.Matrix4f;
 import math.Vector3f;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
     private float SIZE = Level.TILE_SIZE / 2.0f;
@@ -38,6 +40,7 @@ public class Player {
     public int maxMp = 25;
     public long mpRegenCooldown = 4000;
     public long lastRegenTime = 0;
+    private List<EnemyBase> enemies;
 
     public Player() {
         float[] vertices = new float[]{
@@ -76,6 +79,10 @@ public class Player {
         mp += 5;
     }
 
+    public void setEnemies(List<EnemyBase> enemies) {
+        this.enemies = enemies;
+    }
+
     public void update() {
         for (Projectile projectile : projectiles) {
             projectile.update();
@@ -85,6 +92,9 @@ public class Player {
 
         for (Ally ally : allies) {
             ally.update();
+            if (enemies != null) {
+                ally.findNewTarget(enemies);
+            }
             if (ally.hp <= 0) {
                 alliesToRemove.add(ally);
             }
