@@ -16,7 +16,7 @@ public class Explosion {
 
     public float damage = 100;
 
-    public int explosionFrames = 60;
+    public int explosionFrames = 30;
 
     public Explosion(Vector3f position, float radius) {
         this.position = new Vector3f(position.x, position.y, position.z);

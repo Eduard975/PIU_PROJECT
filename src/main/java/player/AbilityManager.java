@@ -3,6 +3,7 @@ package player;
 import entities.EnemyManager;
 import main.CollisionManager;
 import map.Level;
+import sound.SoundPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,9 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class AbilityManager {
     private final Player player;
+    private final SoundPlayer soundPlayer;
     private final EnemyManager enemyManager;
     private final CollisionManager collisionManager;
-
     private final ProjectileAbility projectileAbility;
     private final ResurrectAbility resurrectAbility;
     private final CorpseExplosionAbility corpseExplosionAbility;
@@ -21,10 +22,12 @@ public class AbilityManager {
 
     long windowId = org.lwjgl.glfw.GLFW.glfwGetCurrentContext();
 
-    public AbilityManager(Player player, EnemyManager enemyManager, CollisionManager collisionManager) {
+    public AbilityManager(Player player, EnemyManager enemyManager,
+                          CollisionManager collisionManager, SoundPlayer soundPlayer) {
         this.player = player;
         this.enemyManager = enemyManager;
         this.collisionManager = collisionManager;
+        this.soundPlayer = soundPlayer;
 
         projectileAbility = new ProjectileAbility(5, 2000, this.player);
         resurrectAbility = new ResurrectAbility(10, 2000, this.player);
@@ -62,6 +65,7 @@ public class AbilityManager {
 
         if (glfwGetKey(windowId, GLFW_KEY_E) == GLFW_PRESS) {
             if (projectileAbility.canUse(player.mp)) {
+                soundPlayer.SHOOT.play();
                 projectileAbility.use(player.mp);
                 player.mp -= projectileAbility.getCost();
             }

@@ -109,7 +109,6 @@ public class Slime extends EnemyBase {
             stunDuration--;
             return;
         }
-
         updateAnimation();
         float delta = 1.0f / 60.0f;
 
