@@ -30,13 +30,13 @@ public class Player {
 
     public ArrayList<Projectile> projectiles = new ArrayList<>();
     public ArrayList<Ally> allies = new ArrayList<>();
+    public Explosion explosion;
 
     private float angle;
     private Vector3f position = new Vector3f();
     private Vector3f projectileDirection;
     private Vector3f mousePosition = new Vector3f();
 
-    private AbilityBase[] abilities;
 
     long windowId = GLFW.glfwGetCurrentContext();
 
@@ -52,12 +52,10 @@ public class Player {
     private EnemyManager enemyManager;
     private CollisionManager collisionManager;
 
-    public void initAbilities(){
-        abilities = new AbilityBase[] {
-                new ProjectileAbility(5,2000,this),
-                new ResurrectAbility(10, 2000,this),
-        };
-    }
+    private ProjectileAbility projectileAbility = new ProjectileAbility(5,2000,this);
+    private ResurrectAbility resurrectAbility = new ResurrectAbility(10, 2000,this);
+    private CorpseExplosionAbility corpseExplosionAbility = new CorpseExplosionAbility(10, 2000,this);
+
 
     public Player(EnemyManager enemyManager, CollisionManager collisionManager){
         this.enemyManager = enemyManager;
@@ -85,7 +83,6 @@ public class Player {
         mesh = new VertexArray(vertices, indices, tcs);
         texture = new Texture("src/main/resources/player.png");
 
-        initAbilities();
     }
 
     private boolean canRegenMp() {
@@ -130,18 +127,28 @@ public class Player {
         }
 
         if (glfwGetKey(windowId, GLFW_KEY_E) == GLFW_PRESS) {
-                if (abilities[0].canUse(mp)) {
-                    abilities[0].use(mp);
-                    mp -= abilities[0].getCost();
+                if (projectileAbility.canUse(mp)) {
+                    projectileAbility.use(mp);
+                    mp -= projectileAbility.getCost();
                 }
         }
 
         if (glfwGetKey(windowId, GLFW_KEY_F) == GLFW_PRESS) {
-            if (abilities[1].canUse(mp)) {
+            if (resurrectAbility.canUse(mp)) {
                 if(collisionManager.checkDeadEnemyMouseCollision(mousePosition, enemyManager.deadEnemies)){
-                    abilities[1].use(mp);
-                    mp -= abilities[1].getCost();
+                    resurrectAbility.use(mp);
+                    mp -= resurrectAbility.getCost();
                     enemyManager.deadEnemies.remove(ResurrectAbility.getEnemyToResurrect());
+                }
+            }
+        }
+
+        if (glfwGetKey(windowId, GLFW_KEY_R) == GLFW_PRESS) {
+            if (corpseExplosionAbility.canUse(mp)) {
+                if(collisionManager.checkDeadEnemyMouseCollision(mousePosition, enemyManager.deadEnemies)){
+                    corpseExplosionAbility.use(mp);
+                    mp -= corpseExplosionAbility.getCost();
+                    enemyManager.deadEnemies.remove(CorpseExplosionAbility.getEnemyToExplode());
                 }
             }
         }
@@ -161,7 +168,9 @@ public class Player {
         for (Ally ally : alliesToRemove) {
             allies.remove(ally);
         }
-
+        if(explosion != null){
+            explosion.update();
+        }
         regenMP();
     }
 
@@ -175,6 +184,9 @@ public class Player {
         }
         for(Ally ally: allies){
             ally.render();
+        }
+        if(explosion != null){
+            explosion.render();
         }
         Shader.PLAYER.disable();
     }
@@ -220,5 +232,9 @@ public class Player {
     public void setMousePosition(Vector3f mousePosition) {
         this.mousePosition = mousePosition;
         setProjectileDirection();
+    }
+
+    public Vector3f getMousePosition() {
+        return mousePosition;
     }
 }

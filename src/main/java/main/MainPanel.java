@@ -168,7 +168,7 @@ public class MainPanel implements Runnable {
         Vector3f mousePos = cursorPos.getMouseWorldPosition(camera.getProjectionMatrix(), camera.position);
         player.setAngle(cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
         player.setMousePosition(mousePos);
-        System.out.println("Angle :" + cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
+//        System.out.println("Angle :" + cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
 
 //        System.out.println("Mouse X: " + mousePos.x + ", Mouse Y: " + mousePos.y);
 //        System.out.println("Player X: " + player.getX() + ", Player Y: " + player.getY());
