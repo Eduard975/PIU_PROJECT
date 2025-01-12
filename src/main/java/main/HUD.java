@@ -1,9 +1,6 @@
 package main;
 
-import graphic.FontRenderer;
-import graphic.Shader;
-import graphic.Texture;
-import graphic.VertexArray;
+import graphic.*;
 import math.Matrix4f;
 import math.Vector3f;
 import player.AbilityBase;
@@ -206,6 +203,14 @@ public class HUD {
         Shader.ICON.disable();
     }
 
+    public void drawScore(){
+        String text = "SCORE " + player.score;
+        float stringWidth = fontRenderer.getStringWidth(text);
+
+        fontRenderer.drawString(text, 0 - stringWidth / 4,
+                Camera.HEIGHT - 15, 0.5f);
+    }
+
     private void drawSkillBar() {
         Shader.SKILLS.enable();
         Vector3f invTranslate = new Vector3f(
@@ -226,5 +231,6 @@ public class HUD {
         drawSkillBar();
         drawXpBar();
         drawIcon();
+        drawScore();
     }
 }

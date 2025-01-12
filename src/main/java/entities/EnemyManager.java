@@ -83,7 +83,7 @@ public class EnemyManager {
             if (e.hp <= 0) {
                 enemiesToRemove.add(e);
                 player.xp += e.xpWorth;
-                player.score += 10 * enemyScale;
+                player.score += Math.max((int)(e.hp/2),1);
             }
         }
         player.setEnemies(enemies);
