@@ -52,6 +52,17 @@ public class MainPanel implements Runnable {
 
     private FontRenderer fontRenderer;
 
+    private boolean firstRun = true;
+
+    private enum STATE{
+      MENU,
+      GAME,
+    };
+
+    private STATE state = STATE.MENU;
+
+    private Menu menu;
+
     public void start() {
         init();
         run();
@@ -78,7 +89,10 @@ public class MainPanel implements Runnable {
             throw new IllegalStateException("Unable to initialize GLFW!");
         }
 
-        window = new Window("NecroLord");
+        if(firstRun) {
+            window = new Window("NecroLord");
+            firstRun = false;
+        }
         running = true;
 
         collisionManager = new CollisionManager();
@@ -92,6 +106,7 @@ public class MainPanel implements Runnable {
         fontRenderer.init();
         hud = new HUD(player, abilityManager, fontRenderer);
         soundPlayer.setAllSoundToVolume(0.4f);
+        menu = new Menu(fontRenderer);
 
         camera = new Camera(new Vector3f(0, 0, 0), player);
 
@@ -183,20 +198,52 @@ public class MainPanel implements Runnable {
 
 
     private void update() {
-        abilityManager.update();
         window.update();
-        player.update();
-        level.update();
-        collisionManager.checkProjectilesCollision(player.projectiles, enemyManager.enemies);
-        collisionManager.checkAllyEnemyCollisions(enemyManager.enemies, player.allies);
-        enemyManager.update();
-        camera.update();
-        collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
 
+        switch(state) {
+            case MENU:
+                if (glfwGetKey(window.id, GLFW_KEY_ENTER) == GLFW_PRESS) {
+                    state = STATE.GAME;
+                    if(menu.isGameOver()) {
+                        soundPlayer.BACKGROUND_MUSIC.pause();
+                        init();
+                    }
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
 
-        Vector3f mousePos = cursorPos.getMouseWorldPosition(camera.getProjectionMatrix(), camera.position);
-        player.setAngle(cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
-        player.setMousePosition(mousePos);
+            case GAME:
+                if(player.hp <= 0) {
+                    state = STATE.MENU;
+                    menu.setGameOver(true);
+                }
+                abilityManager.update();
+                player.update();
+                level.update();
+                collisionManager.checkProjectilesCollision(player.projectiles, enemyManager.enemies);
+                collisionManager.checkAllyEnemyCollisions(enemyManager.enemies, player.allies);
+                enemyManager.update();
+                camera.update();
+                collisionManager.checkPlayerEnemyCollision(player, enemyManager.enemies);
+
+                Vector3f mousePos = cursorPos.getMouseWorldPosition(camera.getProjectionMatrix(), camera.position);
+                player.setAngle(cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
+                player.setMousePosition(mousePos);
+
+                if (glfwGetKey(window.id, GLFW_KEY_P) == GLFW_PRESS) {
+                    state = STATE.MENU;
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+        }
 
 //        System.out.println("Angle :" + cursorPos.calculateAngleToMouse(player.getX(), player.getY()));
 
@@ -206,9 +253,18 @@ public class MainPanel implements Runnable {
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        level.render();
-        enemyManager.render();
-        player.render();
-        hud.render();
+
+        switch(state) {
+            case MENU:
+                menu.render();
+                break;
+
+            case GAME:
+                level.render();
+                enemyManager.render();
+                player.render();
+                hud.render();
+                break;
+        }
     }
 }

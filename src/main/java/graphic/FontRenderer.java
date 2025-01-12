@@ -43,6 +43,10 @@ public class FontRenderer {
         float xOffset = startX;
 
         for (char c : text.toCharArray()) {
+            if(c == ' ') {
+                xOffset += characterWidth * scale;
+                continue;
+            }
             Texture texture = characterTextures.get(c);
 
             if (texture != null) {
